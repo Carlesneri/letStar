@@ -41,12 +41,19 @@
     font-size: 1.3em;
 }
 form{
-    text-align: center;
-    width: 15em;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    /* text-align: center; */
 }
 .form-container{
+    max-width: 15em;
     display: flex;
+    flex-direction: column;
     justify-content: center;
+    align-items: center;
 }
 input, textarea{
     width: 100%;
@@ -63,10 +70,29 @@ input, textarea{
 input::placeholder, textarea::placeholder{
     color: var(--light-color);
 }
-.missioner {
+.new-mission-missioner-container{
+    display: block;
+    /* display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap; */
+}
+.new-mission-missioner{
     display: flex;
+    justify-content: center;
     align-items: center;
 }
+.new-mission-missioner input{
+    /* width: 75%; */
+}
+.new-mission-missioner i{
+    /* width: 25%; */
+}
+/* .missioner{
+    width: 75%;
+}
+.trash-container{
+    width: 25%;
+} */
 /* a:hover{
     color: var(--light-color);
 } */
@@ -81,4 +107,7 @@ input::placeholder, textarea::placeholder{
 }
 .remove-missioner{
     cursor: pointer;
+}
+.missioners-name{
+    text-align: center;
 }

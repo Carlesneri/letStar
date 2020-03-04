@@ -82,4 +82,20 @@
     to{
         font-size: 2em;
     }
-  }
+}
+
+@media (max-width: 600px){
+    .mission-title{
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .mission-title-data{
+        display: flex;
+    }
+    .missioner{
+        flex-direction: column;
+    }
+        
+}

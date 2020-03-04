@@ -3,14 +3,16 @@
         <div class="mission-name">
             {{title}}
         </div>
-        <div class="target-container">
-            Objetivo: {{target}}
-        </div>
-        <div>
-            Quedan: 
-            <span id="rem-stars-{{_id}}" class="stars-remind">
-                {{#stars-remind target  missioners}}{{/stars-remind}}
-            </span>
+        <div class="mission-title-data">
+            <div class="target-container">
+                Objetivo: {{target}}
+            </div>
+            <div>
+                Quedan: 
+                <span id="rem-stars-{{_id}}" class="stars-remind">
+                    {{#stars-remind target  missioners}}{{/stars-remind}}
+                </span>
+            </div>
         </div>
         <div class="trash">
             <form action="/mission/{{_id}}?_method=DELETE" method="POST">

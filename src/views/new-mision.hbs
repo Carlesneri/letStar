@@ -1,7 +1,7 @@
 {{>jumbo}}
 
-<div class="form-container">
-    <form action="/new-mission" method="POST">
+<form action="/new-mission" method="POST">
+    <div class="form-container">
         <div class="new-mission-title">
                 <div class="form-title">
             <label for="title">
@@ -19,15 +19,13 @@
                 <textarea name="desc" id="desc" value="desc" placeholder="Descripción"></textarea>
             </div>
         </div>
-        <div class="missioners-name">
-            <div id="missioners">
-                <div id="missioner" class="missioner">
+        <div class="new-mission-missioner-container">
+            <div class="missioners" id="missioners">
+                <div id="missioner" class="new-mission-missioner">
                     <input type="text" id="input-missioner" name="missioners" placeholder="Misionero" required>
-                    {{!-- <div class="remove-missioner" id="remove-missioner" onclick="removeMissioner(event)"> --}}
                     <i class="fa fa-trash remove-missioner" aria-hidden="true" id="remove-missioner" onclick="removeMissioner(event)"></i>
-                    {{!-- </div>  --}}
                 </div>
-             </div>
+            </div>
             <div class="add-missioner" id="add-missioner">
                 <a>
                     Añadir misionero
@@ -49,8 +47,8 @@
                 </p>
             </button>
         </div>
-    </form>
-</div>
+    </div>
+</form>
 {{>footer}}
 <script src="./new-mission.js"></script>
 
