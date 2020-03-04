@@ -1,0 +1,22 @@
+.footer-container{
+    position: absolute;
+    height: 2em;
+    bottom: 2em;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+}
+.footer{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}   
+.footer a:hover{
+    text-decoration: none;
+    color: var(--dark-color);
+    text-shadow: 1px 1px var(--light-color)
+}
+.sobre{
+    font-size: 1.5em;
+    margin: 0 0.7em;
+}

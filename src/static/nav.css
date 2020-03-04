@@ -1,0 +1,15 @@
+.nav{
+    display: flex;
+    justify-content: flex-end;
+}
+.nav-item{
+    margin: 0 1em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.nav-item img{
+    width: 1em;
+    margin: 0;
+    padding: 0;
+}

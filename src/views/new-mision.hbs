@@ -1,0 +1,56 @@
+{{>jumbo}}
+
+<div class="form-container">
+    <form action="/new-mission" method="POST">
+        <div class="new-mission-title">
+                <div class="form-title">
+            <label for="title">
+                <h1 class="new-mission-form-title">
+                    Nueva misión
+                </h1>
+            </label>
+                </div>
+            <div>
+                <input type="text" name="title" id="title" placeholder="Título" autofocus required>
+            </div>
+        </div>
+        <div class="new-mission-desc">
+            <div class="input-desc">
+                <textarea name="desc" id="desc" value="desc" placeholder="Descripción"></textarea>
+            </div>
+        </div>
+        <div class="missioners-name">
+            <div id="missioners">
+                <div id="missioner" class="missioner">
+                    <input type="text" id="input-missioner" name="missioners" placeholder="Misionero" required>
+                    {{!-- <div class="remove-missioner" id="remove-missioner" onclick="removeMissioner(event)"> --}}
+                    <i class="fa fa-trash remove-missioner" aria-hidden="true" id="remove-missioner" onclick="removeMissioner(event)"></i>
+                    {{!-- </div>  --}}
+                </div>
+             </div>
+            <div class="add-missioner" id="add-missioner">
+                <a>
+                    Añadir misionero
+                </a>
+            </div>
+        </div>
+        <div class="target-container">
+            <label for="input-target">
+                Objetivo:
+            </label>
+            <div class="target" id="target">
+                <input type="number" min="1" max="100" name="target" id="input-target" class="input-target" value=10 placeholder="10">
+            </div>
+        </div>
+        <div class="create-mission">
+            <button type="submit" class="missions-btn new-mission-btn-text custom-btn" style="width: 100%">
+                <p class="btn-text">
+                    Crear misión
+                </p>
+            </button>
+        </div>
+    </form>
+</div>
+{{>footer}}
+<script src="./new-mission.js"></script>
+

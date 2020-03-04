@@ -1,0 +1,21 @@
+.index-container{
+    position: relative;
+}
+.p-index{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.p-index-text{
+    text-align: center;
+    font-size: 1.7em;    
+}
+.index-star{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.index-star img{
+    width: 5em;
+    margin-top: 3em;
+}

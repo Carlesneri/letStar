@@ -1,0 +1,10 @@
+
+<div class="missions-jumbo">
+    {{>jumbo}}
+</div>
+<div class="missions">
+    {{#each missions as |mission|}}
+        {{> mission-partial mission}}
+    {{/each}}
+</div>
+{{>footer}}

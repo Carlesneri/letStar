@@ -1,0 +1,16 @@
+.no-missions p{
+    font-size: 2em;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.link-new-mission a{
+    font-size: 0.75em;
+}
+
+.link-new-mission a:hover{
+    font-size: 0.75em;
+    color: var(--light-color);
+}

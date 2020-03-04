@@ -1,0 +1,63 @@
+:root{
+    --dark-color: hsl(191, 100%, 25%);
+    --light-color: hsl(191, 100%, 45%);
+    --lighter-color: #00D0FF;
+    --bg-color: #FFA04D;
+
+}
+html{
+    height: 100%;
+    width: 100%;
+}
+*{
+    font-family: 'Kaushan Script';
+    color: var(--dark-color);
+    font-size: 1rem;
+}
+body{
+    position: relative;
+    min-height: calc(100% - 7em);
+    width: calc(100% - 2em);
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0 0 5em 0;
+    background: var(--bg-color);
+}
+a{
+    text-decoration: none;
+} 
+a:hover{
+    text-decoration: none;
+    color: var(--dark-color);
+    text-shadow: 1px 1px var(--light-color);
+}
+.custom-btn p{
+    color: var(--dark-color);
+    padding: 0;
+    margin: 0;
+}
+.custom-btn:hover{
+    position: relative;
+    background-color: white;
+    text-decoration: none;
+    color: var(--dark-color);
+}
+.custom-btn:hover p{
+    text-shadow: 1px 1px var(--light-color);
+}
+.custom-btn:hover .btn-text{
+    position: relative;
+    top: -1px;
+    left: -1px;
+}
+.new-mission-btn, .custom-btn{
+    cursor: pointer;
+    outline: none;
+    margin: 10px;
+    border: none;
+    border-radius: 3em;
+    padding: 0.69em;
+    text-decoration: none;
+    border: 2px solid var(--lighter-color);
+    background: white;
+}

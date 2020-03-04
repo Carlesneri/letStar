@@ -1,0 +1,85 @@
+.mission {
+    box-shadow: 0px 3px 13px #64b3f4;
+    border-radius: 10px;
+    padding: 20px;
+    margin: 2em;
+}
+.missioner {
+    margin: 10px;
+}
+.mission-title{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.mission-name {
+    text-shadow: 1px 1px var(--light-color);
+    font-size: 1.5em;
+
+}
+.target-container{
+    display: flex;
+    align-items: center;
+}
+.missioner-name{
+    font-size: 1.2em;
+    margin: 0 2em 0 0;
+
+}
+.missioner-stars{
+    display: flex;
+    flex-wrap: wrap;
+}
+.missioner-star{
+    transition: opacity .23s;
+    opacity: .2;
+    width: 2.5em;
+}
+.active-star{
+    transition: opacity .23s;
+    width: 2.5em;
+    opacity: 1;
+}
+.star-btn{
+    background-color: transparent;
+    cursor: pointer;
+    outline: none;
+    border: none;
+    text-decoration: none;
+}
+.star-form{
+    width: fit-content;
+}
+.finished{
+    display: flex;
+    justify-content: center;
+    font-size: 2em;
+    margin: 1em auto;
+    text-shadow: 1px 1px var(--light-color);
+}
+.mission-body .desc{
+    padding: 3em 3em 0 3em;
+    font-size: 1.2em;;
+}
+.appears{
+    font-size: 2em;
+    animation-duration: .69s;
+    animation-name: appears;
+}
+@keyframes appears {
+    from {
+      font-size: 0em;
+    }
+    60% {
+        font-size: 2.2em
+    }
+    75%{
+      font-size: 2em;
+    }
+    90%{
+        font-size: 2.2em;
+    }
+    to{
+        font-size: 2em;
+    }
+  }
