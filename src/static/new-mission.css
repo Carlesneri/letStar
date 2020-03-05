@@ -81,22 +81,10 @@ input::placeholder, textarea::placeholder{
     justify-content: center;
     align-items: center;
 }
-.new-mission-missioner input{
-    /* width: 75%; */
+.add-missioner{
+    text-align: center;
 }
-.new-mission-missioner i{
-    /* width: 25%; */
-}
-/* .missioner{
-    width: 75%;
-}
-.trash-container{
-    width: 25%;
-} */
-/* a:hover{
-    color: var(--light-color);
-} */
-.input-target{
+.target{
     width: 3em;
 }
 .target-container {

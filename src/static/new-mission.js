@@ -16,7 +16,5 @@ addMissionerButton.addEventListener("click", () => {
 })
 
 function removeMissioner(e) {
-    console.log(e.target);
-    
     missionersDiv.removeChild(e.target.parentNode)
 }
