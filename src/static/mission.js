@@ -10,11 +10,11 @@ async function active(e){
     
     try{
         if(target.classList.contains("active-star")) {
-            await removeStar(missionId, missioner, target)
+            removeStar(missionId, missioner, target)
         }
         else{
             if(remindStars > 0){
-                await addStar(missionId, missioner, target)
+                addStar(missionId, missioner, target)
             } else{
                 Swal.fire({
                     html: "Ya has conseguido el objetivo",
@@ -45,6 +45,8 @@ async function active(e){
 
     async function addStar(id, missioner){
         const data = {id, missioner}
+        console.log(data);
+        
         const res = await fetch("/mission/add-star", {
             method: "PUT",
             body: JSON.stringify(data),
@@ -52,10 +54,14 @@ async function active(e){
                 'Content-Type': 'application/json'
             }
         })
+        console.log(res);
+        
         const response = await res.json()
         console.log(response);
         
+        
         const {mission} = response
+        console.log(mission);
         const totalStars = getTotalStars(mission)   
         target.classList.add("active-star")
         document.querySelector($remindStars).innerText = mission.target - totalStars
@@ -63,6 +69,8 @@ async function active(e){
     
     async function removeStar(id, missioner){
         const data = {id, missioner}
+        console.log(data);
+        
         const res = await fetch("/mission/remove-star", {
             method: "PUT",
             body: JSON.stringify(data),
@@ -70,10 +78,14 @@ async function active(e){
                 'Content-Type': 'application/json'
             }
         })
+        console.log(res);
+        
         const response = await res.json()
         console.log(response);
         
         const {mission} = response
+        console.log(mission);
+        
         const totalStars = getTotalStars(mission)        
         target.classList.remove("active-star")
         document.querySelector($remindStars).innerText = mission.target - totalStars
