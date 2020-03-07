@@ -57,11 +57,12 @@ indexCtrl.addStar = async (req, res) => {
     const missionId = req.body.id
     const missionerName = req.body.missioner
     const mission = await MissionModel.findById(missionId)
+    // const totalStars = getTotalStars(mission)
     const index = mission.missioners.findIndex(el => el.name === missionerName)
     mission.missioners[index].stars += 1
     await mission.save()  
     .catch(err => console.log('No ha podido añadir estrella. Error: ', err))
-    res.end() 
+    res.json({mission})
 }
 
 indexCtrl.removeStar = async (req, res) => {
@@ -72,7 +73,7 @@ indexCtrl.removeStar = async (req, res) => {
     mission.missioners[index].stars += -1
     await mission.save()   
     .catch(err => console.log('No ha podido añadir estrella. Error: ', err))
-    res.end()
+    res.json({mission})
 }
 
 indexCtrl.login = (req, res) => {
