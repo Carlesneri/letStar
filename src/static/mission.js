@@ -45,7 +45,7 @@ async function active(e){
 
     async function addStar(id, missioner){
         const data = {id, missioner}
-        
+        target.classList.add("active-star")
         await fetch("/mission/add-star", {
             method: "PUT",
             body: JSON.stringify(data),
@@ -58,13 +58,12 @@ async function active(e){
         const response = await res.json()
         const {mission} = response
         const totalStars = getTotalStars(mission)   
-        target.classList.add("active-star")
         document.querySelector($remindStars).innerText = mission.target - totalStars
     }
     
     async function removeStar(id, missioner){
         const data = {id, missioner}
-        
+	target.classList.remove("active-star")        
         await fetch("/mission/remove-star", {
             method: "PUT",
             body: JSON.stringify(data),
@@ -80,7 +79,6 @@ async function active(e){
         const {mission} = response
         
         const totalStars = getTotalStars(mission)        
-        target.classList.remove("active-star")
         document.querySelector($remindStars).innerText = mission.target - totalStars
     }
 }
