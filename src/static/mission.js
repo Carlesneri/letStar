@@ -1,39 +1,21 @@
-
 async function active(e){
-    let changingStarSwal 
+    const {target} = e
     const missionId = e.target.name
+    const $remindStars = `#rem-stars-${missionId}`
+    let changingStarSwal 
     const missioner = e.target.getAttribute("missioner")
     const $finished = `#finished-${missionId}`
     var finished = document.querySelector($finished)
-    const $remindStars = `#rem-stars-${missionId}`
     var remindStars = Number(document.querySelector($remindStars).innerText)
+    
     try{
-        if(e.target.classList.contains("active-star")) {
-            // changingStarSwal = Swal.fire({
-            //     html: "Quitando estrella",
-            //     showConfirmButton: false, 
-            //     scrollbarPadding: false,
-            //     customClass: {
-            //         container: "swal-star"
-            //     }
-            // })
-            await removeStar(missionId, missioner)
-            e.target.classList.remove("active-star")
-            document.querySelector($remindStars).innerText = remindStars + 1
+        if(target.classList.contains("active-star")) {
+            await removeStar(missionId, missioner, target)
         }
         else{
             if(remindStars > 0){
-                // changingStarSwal = Swal.fire({
-                //     scrollbarPadding: true,
-                //     html: "Añadiendo estrella",
-                //     showConfirmButton: false,
-                // })
-    
-                await addStar(missionId, missioner)
-                e.target.classList.add("active-star")
-                document.querySelector($remindStars).innerText = remindStars - 1
+                await addStar(missionId, missioner, target)
             } else{
-                // const response = addStar(missionId, missioner)
                 Swal.fire({
                     html: "Ya has conseguido el objetivo",
                     showConfirmButton: false,
@@ -51,46 +33,53 @@ async function active(e){
     }
     catch(err){
         console.log(err);
-        
         Swal.fire({
             html: "Error en la petición",
             showConfirmButton: false,
             timer: 1700,
         });
     }
-    setTimeout(() => changingStarSwal.close(), 500)
+    if(changingStarSwal) {
+        setTimeout(() => changingStarSwal.close(), 500)
+    }
+
+    async function addStar(id, missioner){
+        const data = {id, missioner}
+        const res = await fetch("/mission/add-star", {
+            method: "PUT",
+            body: JSON.stringify(data),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        const {mission} = await res.json()
+        const totalStars = getTotalStars(mission)   
+        console.log(totalStars);
+             
+        target.classList.add("active-star")
+        document.querySelector($remindStars).innerText = mission.target - totalStars
+    }
+    
+    async function removeStar(id, missioner){
+        const data = {id, missioner}
+        const res = await fetch("/mission/remove-star", {
+            method: "PUT",
+            body: JSON.stringify(data),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        const {mission} = await res.json()
+        const totalStars = getTotalStars(mission)        
+        target.classList.remove("active-star")
+        document.querySelector($remindStars).innerText = mission.target - totalStars
+    }
 }
 
-async function addStar(id, missioner){
-    const data = {id, missioner}
-    await fetch("/mission/add-star", {
-        method: "PUT",
-        body: JSON.stringify(data),
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    })
+function getTotalStars(mission){
+    var accum = 0;
+    for(let i = 0; i < mission.missioners.length; i++){
+        accum += mission.missioners[i].stars
+    }
+    return accum;  
 }
-
-async function removeStar(id, missioner){
-    const data = {id, missioner}
-    await fetch("/mission/remove-star", {
-        method: "PUT",
-        body: JSON.stringify(data),
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    })
-}
-
-{/* <form 
-action="/mission/add-star/{{../../_id}}?_method=PUT" 
-missionId={{../../_id}}
-method="POST"
-class="star-form"
->
-{{!-- <input type="hidden" name="missionId" value={{../../_id}}>
-<input type="hidden" name="action" value="add-star"> --}}
-<button type="submit" name="missioner" value={{missioner.name}} id="star-button" class="star-btn">
-    <img src="./images/star@0,1x.png" name={{../../_id}} missioner={{missioner.name}} class="missioner-star {{missioner.name}}">
-</button> */}

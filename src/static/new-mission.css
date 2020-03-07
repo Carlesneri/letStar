@@ -22,7 +22,6 @@
     margin: 10px;
     border: none;
     border-radius: 3em;
-    /* padding: 1em; */
     text-decoration: none;
     border: 2px solid var(--lighter-color);
     background: white;
@@ -31,8 +30,7 @@
     font-size: 1em;
 }
 .new-mission-title{
-    display: flex;
-    flex-direction: column;
+    text-align: center;
 }
 .form-title {
     font-size: 2em;
@@ -40,16 +38,13 @@
 .new-mission-btn-text{
     font-size: 1.3em;
 }
-form{
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    /* text-align: center; */
-}
 .form-container{
-    max-width: 15em;
+    display: flex;
+    justify-content: center;
+    align-items: center;    
+}
+.form-continer form{
+    width: 100%;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -69,12 +64,6 @@ input, textarea{
 }
 input::placeholder, textarea::placeholder{
     color: var(--light-color);
-}
-.new-mission-missioner-container{
-    display: block;
-    /* display: flex;
-    flex-direction: column;
-    flex-wrap: nowrap; */
 }
 .new-mission-missioner{
     display: flex;
