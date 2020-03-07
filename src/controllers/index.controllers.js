@@ -56,24 +56,24 @@ indexCtrl.deleteMission = async (req, res) => {
 indexCtrl.addStar = async (req, res) => {
     const missionId = req.body.id
     const missionerName = req.body.missioner
-    const mission = await MissionModel.findById(missionId)
+    const missionFound = await MissionModel.findById(missionId)
     // const totalStars = getTotalStars(mission)
-    const index = mission.missioners.findIndex(el => el.name === missionerName)
-    mission.missioners[index].stars += 1
-    await mission.save()  
+    const index = missionFound.missioners.findIndex(el => el.name === missionerName)
+    missionFound.missioners[index].stars += 1
+    await missionFound.save()  
     .catch(err => console.log('No ha podido añadir estrella. Error: ', err))
-    res.json({mission})
+    res.json({"mission": missionFound})
 }
 
 indexCtrl.removeStar = async (req, res) => {
     const missionId = req.body.id
     const missionerName = req.body.missioner
-    const mission = await MissionModel.findById(missionId)
-    const index = mission.missioners.findIndex(el => el.name === missionerName)
-    mission.missioners[index].stars += -1
-    await mission.save()   
+    const missionFound = await MissionModel.findById(missionId)
+    const index = missionFound.missioners.findIndex(el => el.name === missionerName)
+    missionFound.missioners[index].stars += -1
+    await missionFound.save()   
     .catch(err => console.log('No ha podido añadir estrella. Error: ', err))
-    res.json({mission})
+    res.json({"mission": missionFound})
 }
 
 indexCtrl.login = (req, res) => {
