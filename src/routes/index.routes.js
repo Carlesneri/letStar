@@ -8,7 +8,8 @@ const {renderIndex,
     deleteMission, 
     addStar,
     removeStar, 
-    login
+    login, 
+    getMission
 } = require('../controllers/index.controllers')
 
 const router = Router()
@@ -31,5 +32,7 @@ router.put('/mission/add-star', addStar)
 router.put('/mission/remove-star', removeStar)
 
 router.get('/login', login)
+
+router.get('/mission/:id', getMission)
 
 module.exports = router;

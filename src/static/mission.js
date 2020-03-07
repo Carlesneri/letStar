@@ -10,11 +10,11 @@ async function active(e){
     
     try{
         if(target.classList.contains("active-star")) {
-            removeStar(missionId, missioner, target)
+            await removeStar(missionId, missioner)
         }
         else{
             if(remindStars > 0){
-                addStar(missionId, missioner, target)
+                await addStar(missionId, missioner)
             } else{
                 Swal.fire({
                     html: "Ya has conseguido el objetivo",
@@ -45,23 +45,18 @@ async function active(e){
 
     async function addStar(id, missioner){
         const data = {id, missioner}
-        console.log(data);
         
-        const res = await fetch("/mission/add-star", {
+        await fetch("/mission/add-star", {
             method: "PUT",
             body: JSON.stringify(data),
             headers: {
                 'Content-Type': 'application/json'
             }
         })
-        console.log(res);
-        
+
+        const res = await fetch(`/mission/${id}`)
         const response = await res.json()
-        console.log(response);
-        
-        
         const {mission} = response
-        console.log(mission);
         const totalStars = getTotalStars(mission)   
         target.classList.add("active-star")
         document.querySelector($remindStars).innerText = mission.target - totalStars
@@ -69,22 +64,20 @@ async function active(e){
     
     async function removeStar(id, missioner){
         const data = {id, missioner}
-        console.log(data);
         
-        const res = await fetch("/mission/remove-star", {
+        await fetch("/mission/remove-star", {
             method: "PUT",
             body: JSON.stringify(data),
             headers: {
                 'Content-Type': 'application/json'
             }
         })
-        console.log(res);
+
+        const res = await fetch(`/mission/${id}`)
         
         const response = await res.json()
-        console.log(response);
         
         const {mission} = response
-        console.log(mission);
         
         const totalStars = getTotalStars(mission)        
         target.classList.remove("active-star")
