@@ -81,4 +81,12 @@ indexCtrl.login = (req, res) => {
     res.send("aquí irá el login, soy Joan")
 }
 
+indexCtrl.getMission = async (req, res) => {
+    const missionId = req.params.id
+    const mission = await MissionModel.findById(missionId)
+    res.json({mission})
+    
+}
+
 module.exports = indexCtrl;
+
