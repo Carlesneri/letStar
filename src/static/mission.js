@@ -52,10 +52,11 @@ async function active(e){
                 'Content-Type': 'application/json'
             }
         })
-        const {mission} = await res.json()
+        const response = await res.json()
+        console.log(response);
+        
+        const {mission} = response
         const totalStars = getTotalStars(mission)   
-        console.log(totalStars);
-             
         target.classList.add("active-star")
         document.querySelector($remindStars).innerText = mission.target - totalStars
     }
@@ -69,7 +70,10 @@ async function active(e){
                 'Content-Type': 'application/json'
             }
         })
-        const {mission} = await res.json()
+        const response = await res.json()
+        console.log(response);
+        
+        const {mission} = response
         const totalStars = getTotalStars(mission)        
         target.classList.remove("active-star")
         document.querySelector($remindStars).innerText = mission.target - totalStars
