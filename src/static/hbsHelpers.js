@@ -26,4 +26,3 @@ Handlebars.registerHelper('finished', function(target, missioners, block) {
     if (remindStars) return ''
     else return 'Conseguido!' 
 });
-
