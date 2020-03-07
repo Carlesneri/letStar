@@ -1,11 +1,12 @@
 const db = require('mongoose')
-db.set('useFindAndModify', false);
-
+db.set('useFindAndModify', false)
 const {MissionModel} = require('../database/model')
 require('dotenv').config()
 require('../static/hbsHelpers')
+const DB_URI = process.env.DB_URI
+console.log(DB_URI)
 
-db.connect(process.env.DB_URI, {
+db.connect(DB_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true
 }, () => console.log('db conectada con éxito'))
