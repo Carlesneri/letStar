@@ -1,0 +1,33 @@
+{{>jumbo}}
+{{>messages}}
+<div class="form-container">
+    <form action="/register" method="POST">
+        <div class="new-mission-title form-item">
+            <div class="form-title">
+                <label for="title">
+                    <h1 class="new-mission-form-title">
+                        Registro
+                    </h1>
+                </label>
+            </div>
+        </div>
+        <div class="form-item">
+            <input type="text" name="name" id="name" placeholder="Nombre de Usuario" required="true" fill={{name}} >
+        </div>
+        <div class="form-item">
+            <input type="password" name="password" id="password" placeholder="Contraseña"  required="true" fill={{password}}>
+        </div>
+        <div class="login-btn-container form-item">
+            <button type="submit" class="custom-btn login-btn">
+                <p class="btn-text">
+                    Registrarte
+                </p>
+            </button>
+        </div>
+        <div class="form-item">
+            <a href="/login">Ya tengo cuenta</a>
+        </div>
+    </form>
+</div>
+<script src="registerForm.js"></script>
+{{>footer}}

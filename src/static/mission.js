@@ -37,7 +37,7 @@ async function active(e){
             html: "Error en la petición",
             showConfirmButton: false,
             timer: 1700,
-        });
+        })
     }
     if(changingStarSwal) {
         setTimeout(() => changingStarSwal.close(), 500)
@@ -55,8 +55,8 @@ async function active(e){
             }
         })
 
-        const res = await fetch(`/mission/${id}`)
-        const response = await res.json()
+        const res = await fetch(`/mission/${id}`)       
+        const response = await res.json()        
         const {mission} = response
         const totalStars = getTotalStars(mission)   
         document.querySelector($remindStars).innerText = mission.target - totalStars

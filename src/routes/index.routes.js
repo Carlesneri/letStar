@@ -8,7 +8,10 @@ const {renderIndex,
     deleteMission, 
     addStar,
     removeStar, 
-    login, 
+    loginForm, 
+    registerForm,
+    login,
+    register,
     getMission
 } = require('../controllers/index.controllers')
 
@@ -31,7 +34,13 @@ router.put('/mission/add-star', addStar)
 
 router.put('/mission/remove-star', removeStar)
 
-router.get('/login', login)
+router.get('/login', loginForm)
+
+router.get('/register', registerForm)
+
+router.post('/login', login)
+
+router.post('/register', register)
 
 router.get('/mission/:id', getMission)
 

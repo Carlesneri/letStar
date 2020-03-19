@@ -1,10 +1,10 @@
-const db = require('mongoose')
-db.set('useFindAndModify', false)
-const {MissionModel} = require('../database/model')
+const db = require('mongoose', {'useFindAndModify': false})
+// db.set('useFindAndModify', false)
+const {MissionModel, UserModel} = require('../database/model')
 require('dotenv').config()
 require('../static/hbsHelpers')
 const DB_URI = process.env.DB_URI
-console.log(DB_URI)
+const app = 
 
 db.connect(DB_URI, {
     useNewUrlParser: true,
@@ -35,7 +35,8 @@ indexCtrl.addNewMission = async (req, res) => {
         target: req.body.target
     })
     await newMission.save()
-    res.redirect('missions')
+    req.flash('success_msg', 'Misión creada')
+    res.redirect('/missions')
 }
 
 indexCtrl.renderMissions = async (req, res) => {
@@ -51,6 +52,7 @@ indexCtrl.renderNoMissions = (req, res) => {
 
 indexCtrl.deleteMission = async (req, res) => {
     await MissionModel.findByIdAndDelete(req.params.id)
+    req.flash('success_msg', 'Misión eliminada')
     res.redirect('/missions')
 }
 
@@ -77,8 +79,31 @@ indexCtrl.removeStar = async (req, res) => {
     res.json({"mission": missionFound})
 }
 
+indexCtrl.loginForm = (req, res) => {
+    res.render("loginForm")
+}
+
+indexCtrl.registerForm = (req, res) => {
+    res.render("registerForm")
+}
+
 indexCtrl.login = (req, res) => {
-    res.send("aquí irá el login, soy Joan")
+    const {name, password} = req.body
+    console.log(name, password)
+    res.redirect('/missions')
+}
+
+indexCtrl.register = async (req, res, next) => {
+    const {name, password} = req.body
+    const user = await UserModel.findOne({name})
+    if(user) {
+        req.flash('error_msg', 'El usuario ya existe')
+        res.render('registerForm', {name, password})
+    }else{
+        const newUser = new UserModel({name, password})
+        await newUser.save()
+        res.redirect('/missions')
+    }
 }
 
 indexCtrl.getMission = async (req, res) => {

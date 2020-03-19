@@ -33,7 +33,23 @@ const missionSchema = new Schema({
     timestamps: true
 })
 
+const userSchema = new Schema({
+    name: {
+        type: String,
+        required: true, 
+        createIndexes: true
+    },
+    password: {
+        type: String,
+        required: true
+    }
+},
+{
+    timestamsp: true
+})
+
 
 const MissionModel = mongoose.model('Mission', missionSchema)
 const MissionerModel = mongoose.model('Missioner', missionerSchema)
-module.exports = {MissionModel, MissionerModel}
+const UserModel = mongoose.model('User', userSchema)
+module.exports = {MissionModel, MissionerModel, UserModel}

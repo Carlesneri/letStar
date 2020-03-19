@@ -5,6 +5,8 @@ const router = require('./routes/index.routes')
 const bodyParser = require('body-parser')
 const methodOverride = require('method-override')
 const morgan = require('morgan')
+const flash = require('connect-flash')
+const session = require('express-session')
 
 const app = express();
 
@@ -28,6 +30,21 @@ app.use(bodyParser.urlencoded({
 app.use(methodOverride('_method'))
 app.use(bodyParser.json())
 app.use(express.static(app.get('static')));
+app.use(session({
+    secret: 'secret',
+    resave: true,
+    saveUninitialized: true
+}));
+app.use(flash());
+
+//Global Variables
+app.use((req, res, next) => {
+    res.locals.success_msg = req.flash('success_msg')
+    res.locals.error_msg = req.flash('error_msg')
+    next()
+})
+
+//--> Routes
 app.use(router);
 
 module.exports = app;
