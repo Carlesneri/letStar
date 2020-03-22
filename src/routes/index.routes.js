@@ -1,4 +1,5 @@
 const { Router } = require('express');
+const isUser = require('../middlewares/verifyToken')
 
 const {renderIndex, 
     renderNewMissionForm, 
@@ -12,6 +13,7 @@ const {renderIndex,
     registerForm,
     login,
     register,
+    logout,
     getMission
 } = require('../controllers/index.controllers')
 
@@ -19,20 +21,20 @@ const router = Router()
 
 router.get('/', renderIndex)
 
-router.get('/new-mission', renderNewMissionForm)
+router.get('/new-mission', isUser, renderNewMissionForm)
 
 router.post('/new-mission', addNewMission)
 
-router.get('/missions', renderMissions)
+router.get('/missions', isUser, renderMissions)
 
 router.get('/no-missions', renderNoMissions)
 
-router.delete('/mission/:id', deleteMission)
+router.delete('/mission/:id', isUser, deleteMission)
 
 
-router.put('/mission/add-star', addStar)
+router.put('/mission/add-star', isUser, addStar)
 
-router.put('/mission/remove-star', removeStar)
+router.put('/mission/remove-star', isUser, removeStar)
 
 router.get('/login', loginForm)
 
@@ -42,6 +44,8 @@ router.post('/login', login)
 
 router.post('/register', register)
 
-router.get('/mission/:id', getMission)
+router.get('/logout', logout)
+
+router.get('/mission/:id', isUser, getMission)
 
 module.exports = router;

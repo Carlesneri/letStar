@@ -1,4 +1,5 @@
 {{>jumbo}}
+{{>messages}}
 <div class="form-container">
     <form action="/login" method="POST">
         <div class="new-mission-title form-item">
@@ -11,7 +12,7 @@
             </div>
         </div>
         <div class="form-item">
-            <input type="text" name="name" id="name" placeholder="Nombre de usuario" autofocus required>
+            <input type="email" name="email" id="email" placeholder="Email" autofocus required>
         </div>
         <div class="form-item">
             <input type="password" name="password" id="password" placeholder="Contraseña" required>

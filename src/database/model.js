@@ -14,6 +14,9 @@ const missionerSchema = new Schema({
 })
 
 const missionSchema = new Schema({
+    user: {
+        type: String,
+    },
     title: {
         type: String,
         required: true
@@ -34,10 +37,13 @@ const missionSchema = new Schema({
 })
 
 const userSchema = new Schema({
+    email: {
+        type: String,
+        required: true,
+    },
     name: {
         type: String,
-        required: true, 
-        createIndexes: true
+        required: true
     },
     password: {
         type: String,

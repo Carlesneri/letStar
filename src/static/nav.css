@@ -1,6 +1,7 @@
 .nav{
     display: flex;
     justify-content: flex-end;
+    padding: .7em;
 }
 .nav-item{
     margin: 0 1em;
@@ -12,4 +13,7 @@
     width: 1em;
     margin: 0;
     padding: 0;
+}
+.user-name {
+    font-size: 1.5em;
 }

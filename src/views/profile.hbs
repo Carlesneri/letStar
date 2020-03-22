@@ -1,0 +1,28 @@
+<div class="nav">
+    <div class="nav-item name">
+        {{user.name}}
+    </div>
+    <div class="nav-item user">
+        <img src="images/star@0,1x.png" alt="mission star 0,1">
+        <a href="/logout">
+            logout
+        </a>
+    </div>
+</div>
+{{>jumbo}}
+<div class="new-mission-container">
+    <a href="/new-mission" class="custom-btn new-mission-btn">
+        <p class="btn-text new-mission-btn-text">
+            Crear nueva misión
+        </p>
+    </a>
+</div>
+<div class="my-missions-container">
+    <a href="/missions" class="missions-btn custom-btn">
+        <p class="btn-text">
+            Ver misiones
+        </p>
+    </a>
+</div>
+{{>footer}}
+
