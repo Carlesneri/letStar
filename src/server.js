@@ -5,8 +5,12 @@ const router = require('./routes/index.routes')
 const bodyParser = require('body-parser')
 const methodOverride = require('method-override')
 const morgan = require('morgan')
+const flash = require('connect-flash')
+const session = require('express-session')
+const passport = require('passport')
 
 const app = express();
+require('./auth/local')
 
 //-->Settings
 app.set('PORT', process.env.PORT || 5000);
@@ -28,6 +32,25 @@ app.use(bodyParser.urlencoded({
 app.use(methodOverride('_method'))
 app.use(bodyParser.json())
 app.use(express.static(app.get('static')));
+app.use(session({
+    secret: 'secret',
+    resave: true,
+    saveUninitialized: true
+}));
+app.use(passport.initialize())
+app.use(passport.session())
+app.use(flash());
+
+//Global Variables
+app.use((req, res, next) => {
+    res.locals.success_msg = req.flash('success_msg')
+    res.locals.error_msg = req.flash('error_msg')
+    res.locals.error = req.flash('error')
+    res.locals.user = req.user || null
+    next()
+})
+
+//--> Routes
 app.use(router);
 
 module.exports = app;

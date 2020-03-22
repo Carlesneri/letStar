@@ -1,7 +1,11 @@
 .create-mission, .add-missioner{
     cursor: pointer;
-    margin: 10px auto;
-    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+    /* margin: 10px auto; */
+    /* width: 100%; */
 }
 .new-mission-container{
     width: 100%;
@@ -36,19 +40,18 @@
     font-size: 2em;
 }
 .new-mission-btn-text{
+    width: 100%;
     font-size: 1.3em;
 }
 .form-container{
-    display: flex;
-    justify-content: center;
-    align-items: center;    
+    max-width: 20em;
+    margin: 0 auto;
 }
-.form-continer form{
-    width: 100%;
+.form-container form{
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: center;
+    align-items: center;    
 }
 input, textarea{
     width: 100%;

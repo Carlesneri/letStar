@@ -66,6 +66,12 @@
     animation-duration: .69s;
     animation-name: appears;
 }
+.mission-title-data{
+    display: flex;
+}
+.mission-title-data-item{
+    margin: 0 1em;
+}
 @keyframes appears {
     from {
       font-size: 0em;
@@ -91,9 +97,10 @@
         justify-content: space-between;
         align-items: center;
     }
-    .mission-title-data{
+    /* .mission-title-data{
         display: flex;
-    }
+        
+    } */
     .missioner{
         flex-direction: column;
     }

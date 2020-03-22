@@ -1,0 +1,48 @@
+{{#if success_msg}}
+    <div class="flash-message">{{success_msg}}</div>
+    <script>
+        const messageContainer = document.querySelector('.flash-message')
+        const message = messageContainer.innerText     
+        Swal.fire({
+            html: message,
+            showConfirmButton: false,
+            timer: 1700,
+        });
+
+//        window.addEventListener('load', () => {
+//        })
+        
+    </script>
+{{/if}}
+{{#if error_msg}}
+    <div class="flash-message">{{error_msg}}</div>
+    <script>
+        const messageContainer = document.querySelector('.flash-message')
+        const message = messageContainer.innerText
+        Swal.fire({
+            html: message,
+            showConfirmButton: false,
+            timer: 1700,
+        });
+
+        
+        
+    </script>
+{{/if}}
+
+{{#if error}}
+    <div class="flash-message">{{error}}</div>
+    <script>
+        const messageContainer = document.querySelector('.flash-message')
+        const message = messageContainer.innerText
+        Swal.fire({
+            html: message,
+            showConfirmButton: false,
+            timer: 1700,
+        });
+
+        
+        
+    </script>
+{{/if}}
+<link rel="stylesheet" type="text/css" href="../messages.css">

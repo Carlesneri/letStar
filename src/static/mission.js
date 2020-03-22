@@ -37,7 +37,7 @@ async function active(e){
             html: "Error en la petición",
             showConfirmButton: false,
             timer: 1700,
-        });
+        })
     }
     if(changingStarSwal) {
         setTimeout(() => changingStarSwal.close(), 500)
@@ -46,6 +46,10 @@ async function active(e){
     async function addStar(id, missioner){
         const data = {id, missioner}
         target.classList.add("active-star")
+<<<<<<< HEAD
+=======
+        
+>>>>>>> 73d06070785be1d867f243d62dcc55613b7820d6
         await fetch("/mission/add-star", {
             method: "PUT",
             body: JSON.stringify(data),
@@ -54,8 +58,8 @@ async function active(e){
             }
         })
 
-        const res = await fetch(`/mission/${id}`)
-        const response = await res.json()
+        const res = await fetch(`/mission/${id}`)       
+        const response = await res.json()        
         const {mission} = response
         const totalStars = getTotalStars(mission)   
         document.querySelector($remindStars).innerText = mission.target - totalStars
@@ -63,7 +67,12 @@ async function active(e){
     
     async function removeStar(id, missioner){
         const data = {id, missioner}
+<<<<<<< HEAD
 	target.classList.remove("active-star")        
+=======
+        target.classList.remove("active-star")
+        
+>>>>>>> 73d06070785be1d867f243d62dcc55613b7820d6
         await fetch("/mission/remove-star", {
             method: "PUT",
             body: JSON.stringify(data),

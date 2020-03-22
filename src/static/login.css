@@ -1,0 +1,8 @@
+.form-item{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+.login-btn{
+    width: 100%;
+}
