@@ -13,7 +13,7 @@ const app = express();
 require('./auth/local')
 
 //-->Settings
-app.set('PORT', process.env.PORT || 5000);
+app.set('PORT', process.env.PORT || 80);
 app.set('views', path.join(__dirname, 'views'));
 app.set('static', path.join(__dirname, 'static'));
 app.engine('.hbs', exphbs({
