@@ -3,12 +3,19 @@ const http = require ('http')
 const https = require ('https')
 const fs = require('fs')
 const path = require('path')
+const dotenv = require('dotenv')
+
+dotenv.config()
 
 const privateKey = fs.readFileSync(path.join(__dirname, '../SSL/private.key'), 'utf8')
 const certificate = fs.readFileSync(path.join(__dirname, '../SSL/certificate.crt'), 'utf8')
 const caBundle = fs.readFileSync(path.join(__dirname, '../SSL/ca_bundle.crt'), 'utf8')
 
-if(app.get('PORT') === '80'){
+if(process.env.DEVELOPMENT = 'true'){
+    http.createServer(app)
+    .listen(app.get('PORT'), () => console.log('Server listening on port ', app.get('PORT')))
+
+}else{
     console.log('Redirecting https');
     
     http.createServer((req, res) => {
@@ -16,9 +23,7 @@ if(app.get('PORT') === '80'){
             res.end();
         })
         .listen(app.get('PORT'), () => console.log('Server listening on port ', app.get('PORT')))
-}else{
-    http.createServer(app)
-        .listen(app.get('PORT'), () => console.log('Server listening on port ', app.get('PORT')))
+
 }
 
 https.createServer({

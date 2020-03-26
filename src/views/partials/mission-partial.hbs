@@ -67,6 +67,11 @@
         <div class="desc">
             {{description}}
         </div>
+        <div class="date">
+            {{#if date }}
+                Fecha tope: {{date.day}} - {{date.month}} - {{date.year}}
+            {{/if}}
+        </div>
         <div class="finished" id="finished-{{_id}}">
             {{#finished target  missioners}}
             {{/finished}}

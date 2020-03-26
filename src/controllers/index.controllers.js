@@ -1,6 +1,6 @@
 const db = require('mongoose', {'useFindAndModify': false})
 const bcrypt = require('bcryptjs')
-const {MissionModel, UserModel} = require('../database/model')
+const {MissionModel, UserModel, DateModel} = require('../database/model')
 require('dotenv').config()
 require('../static/hbsHelpers')
 const DB_URI = process.env.DB_URI
@@ -25,6 +25,14 @@ indexCtrl.renderNewMissionForm = (req,res) => {
 
 indexCtrl.addNewMission = async (req, res) => {
     const {missioners} = req.body
+    console.log(req.body);
+    const dateArr = req.body.date.split('-')
+    
+    const date = {
+        day: dateArr[2],
+        month: dateArr[1],
+        year: dateArr[0]
+    }
     const missionersArr = []
     if(typeof(missioners) !== "string"){
         missioners.forEach(missioner => missionersArr.push({name: missioner}))
@@ -39,7 +47,8 @@ indexCtrl.addNewMission = async (req, res) => {
             title: req.body.title,
             description: req.body.desc,
             missioners: missionersArr,
-            target: req.body.target
+            target: req.body.target,
+            date: date
         })
         await newMission.save()
         req.flash('success_msg', 'Misión creada')

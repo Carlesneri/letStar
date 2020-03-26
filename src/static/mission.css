@@ -33,11 +33,11 @@
 .missioner-star{
     transition: opacity .23s;
     opacity: .2;
-    width: 2.5em;
+    width: 2.25em;
 }
 .active-star{
     transition: opacity .23s;
-    width: 2.5em;
+    width: 2.25em;
     opacity: 1;
 }
 .star-btn{
@@ -56,15 +56,23 @@
     font-size: 2em;
     margin: 1em auto;
     text-shadow: 1px 1px var(--light-color);
+    /* transition: font-size .69s; */
 }
-.mission-body .desc{
-    padding: 3em 3em 0 3em;
-    font-size: 1.2em;;
+.mission-body {
+    padding: 1em;
+    font-size: 1.2em;
+}
+.missioners, .desc, .date {
+    padding: 1em;
 }
 .appears{
     font-size: 2em;
     animation-duration: .69s;
-    animation-name: appears;
+    /* animation-name: appears; */
+}
+.disappears{
+    font-size: 0;
+    animation-duration: .69s;
 }
 .mission-title-data{
     display: flex;

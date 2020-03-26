@@ -23,7 +23,7 @@ router.get('/', renderIndex)
 
 router.get('/new-mission', isUser, renderNewMissionForm)
 
-router.post('/new-mission', addNewMission)
+router.post('/new-mission', isUser, addNewMission)
 
 router.get('/missions', isUser, renderMissions)
 

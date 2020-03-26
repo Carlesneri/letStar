@@ -24,11 +24,14 @@ async function active(e){
             }
         }
         if(document.querySelector($remindStars).innerText < 1){
+            finished.fontSize = 0
             finished.innerText = "Conseguido!"
+            finished.classList.remove("disappears")
             finished.classList.add("appears")
         }else {
-            finished.innerText = ""
+            finished.innerText = "Conseguido!"
             finished.classList.remove("appears")
+            finished.classList.add("disappears")
         }
     }
     catch(err){
