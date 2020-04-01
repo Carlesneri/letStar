@@ -1,112 +1,107 @@
-async function active(e){
-    const {target} = e
-    const missionId = e.target.name
-    const $remindStars = `#rem-stars-${missionId}`
-    let changingStarSwal 
-    const missioner = e.target.getAttribute("missioner")
-    const $finished = `#finished-${missionId}`
-    var finished = document.querySelector($finished)
-    var remindStars = Number(document.querySelector($remindStars).innerText)
-    
-    try{
-        if(target.classList.contains("active-star")) {
-            await removeStar(missionId, missioner)
-        }
-        else{
-            if(remindStars > 0){
-                await addStar(missionId, missioner)
-            } else{
-                Swal.fire({
-                    html: "Ya has conseguido el objetivo",
-                    showConfirmButton: false,
-                    timer: 1700,
-                });
-            }
-        }
-        if(document.querySelector($remindStars).innerText < 1){
-            finished.fontSize = 0
-            finished.innerText = "Conseguido!"
-            finished.classList.remove("disappears")
-            finished.classList.add("appears")
-        }else {
-            finished.innerText = "Conseguido!"
-            finished.classList.remove("appears")
-            finished.classList.add("disappears")
-        }
-    }
-    catch(err){
-        console.log(err);
-        Swal.fire({
-            html: "Error en la petición",
-            showConfirmButton: false,
-            timer: 1700,
-        })
-    }
-    if(changingStarSwal) {
-        setTimeout(() => changingStarSwal.close(), 500)
-    }
-
-    async function addStar(id, missioner){
-        try{
-            const data = {id, missioner}
-            await fetch("/mission/add-star", {
-                method: "PUT",
-                body: JSON.stringify(data),
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            })
-            
-            const res = await fetch(`/mission/${id}`)       
-            const response = await res.json()        
-            const {mission} = response
-            target.classList.add("active-star")
-            const totalStars = getTotalStars(mission)   
-            document.querySelector($remindStars).innerText = mission.target - totalStars
-        }catch(err){
-            console.log('Error al añadir estrella. Error: ', err);
-            Swal.fire({
-                html: "Error al añadir estrella",
-                showConfirmButton: false,
-                timer: 1700,
-            })
-        }
-    }
-    
-    async function removeStar(id, missioner){
-        try{
-            const data = {id, missioner}
-    
-            await fetch("/mission/remove-star", {
-                method: "PUT",
-                body: JSON.stringify(data),
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            })
-            
-            const res = await fetch(`/mission/${id}`)
-            const response = await res.json()
-            const {mission} = response
-            target.classList.remove("active-star")        
-            const totalStars = getTotalStars(mission)        
-            document.querySelector($remindStars).innerText = mission.target - totalStars
-        }catch(err){
-            console.log('Error al quitar estrella. Error: ', err);
-            Swal.fire({
-                html: "Error al quitar estrella",
-                showConfirmButton: false,
-                timer: 1700,
-            })
-        }
-    }
+async function addStar(event){   
+    event.target.style.visibility = 'hidden' 
+    const mission = event.target.getAttribute("mission")
+    const missioner = event.target.getAttribute("missioner")
+    await Swal.fire({
+        html: 
+        `<h2>Nueva estrella</h2>
+        <div class="new-star-form">
+            <input type="text" id="star-comment" class="comment" autofocus placeholder="Comentario"></input>
+            <a class="btn-text" onclick="newStar(event)" missionId=${mission} missionerId=${missioner} >Guardar</>
+        </div>`,
+        showConfirmButton: false
+    })
+    // const comment = getComment.value || null
 }
 
-
-function getTotalStars(mission){
-    var accum = 0;
-    for(let i = 0; i < mission.missioners.length; i++){
-        accum += mission.missioners[i].stars
+async function newStar(event) {
+    const missionId = event.target.getAttribute("missionId")
+    const missionerId = event.target.getAttribute("missionerId")
+    const comment = document.getElementById("star-comment").value
+    try{
+        const data = {missionId, missionerId, comment}
+        await fetch("/star", {
+            method: "PUT",
+            body: JSON.stringify(data),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+    }catch(err){
+        console.log('Error al añadir estrella. Error: ', err);
+        Swal.fire({
+            html: "Error al añadir estrella",
+            showConfirmButton: false,
+            timer: 1300,
+        })
     }
-    return accum;  
+    location.reload()
+}
+
+async function editStar(event) {
+    const mission = event.target.getAttribute("mission")
+    const missioner = event.target.getAttribute("missioner")
+    const star = event.target.getAttribute("star")
+    const comment = await getComment(star) || ''
+    await Swal.fire({
+        html:
+        `<h2>Editar estrella</h2>
+        <div><textarea type="text" id="comment" class="comment">${comment}</textarea></div>
+        <div class="edit-star-form">
+            <a class="btn-text" onclick="removeStar(event)" missionId=${mission} missionerId=${missioner} starId=${star}>Eliminar Estrella</>
+            <a class="btn-text" onclick="saveStar(event)" missionId=${mission} missionerId=${missioner} starId=${star}>Guardar Cambios</a>
+        </div>`,
+        showConfirmButton: false,
+    })    
+}
+
+async function saveStar(event) {
+    const newComment = document.getElementById("comment").value
+    try{
+        const missionId = event.target.getAttribute("missionId")
+        const missionerId = event.target.getAttribute("missionerId")
+        const starId = event.target.getAttribute("starId")   
+        const data = {missionId, missionerId, starId, newComment}
+        await fetch("/star", {
+            method: "PATCH",
+            body: JSON.stringify(data),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+    }catch(err){
+        console.log('Error al añadir estrella. Error: ', err);
+        Swal.fire({
+            html: "Error al añadir estrella",
+            showConfirmButton: false,
+            timer: 1300,
+        })
+    }
+    location.reload()
+}
+
+async function removeStar(event){    
+    const missionId = event.target.getAttribute("missionId")
+    const missionerId = event.target.getAttribute("missionerId")
+    const starId = event.target.getAttribute("starId")
+    const data = { missionId, missionerId, starId }
+    try {
+        await fetch('/star', {
+            method: "DELETE",
+            body: JSON.stringify(data),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+    } catch(error) {
+        console.log(error)        
+    }
+    location.reload()
+}
+
+async function getComment(starId) {
+    const data = await fetch(`/star/${starId}`)
+    const star = await data.json()
+    const {comment} = star.star
+    return comment   
 }

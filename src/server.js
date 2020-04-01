@@ -8,6 +8,7 @@ const morgan = require('morgan')
 const flash = require('connect-flash')
 const session = require('express-session')
 const passport = require('passport')
+const cors = require('cors')
 
 const app = express();
 require('./auth/local')
@@ -39,7 +40,8 @@ app.use(session({
 }));
 app.use(passport.initialize())
 app.use(passport.session())
-app.use(flash());
+app.use(flash())
+app.use(cors())
 
 //Global Variables
 app.use((req, res, next) => {

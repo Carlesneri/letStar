@@ -38,7 +38,6 @@ a:hover{
 }
 .custom-btn:hover{
     position: relative;
-    background-color: white;
     text-decoration: none;
     color: var(--dark-color);
 }
@@ -51,6 +50,7 @@ a:hover{
     left: -1px;
 }
 .new-mission-btn, .custom-btn{
+    background-color: transparent;
     cursor: pointer;
     outline: none;
     margin: 10px;
@@ -59,6 +59,11 @@ a:hover{
     padding: 0.69em;
     text-decoration: none;
     border: 2px solid var(--lighter-color);
-    background: white;
+}
+.empty-button {
+    border: none;
+    background-color: transparent;
+    outline: none;
+    cursor: pointer;
 }
 

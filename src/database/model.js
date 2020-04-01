@@ -2,16 +2,6 @@ const mongoose = require('mongoose')
 
 const Schema = mongoose.Schema
 
-const missionerSchema = new Schema({
-    name: {
-        type: String, 
-        required: true,
-    },
-    stars: {
-        type: Number,
-        default: 0
-    }
-})
 
 const dateSchema = new Schema({
     day: {
@@ -25,9 +15,29 @@ const dateSchema = new Schema({
     }
 })
 
+const starSchema = new Schema({
+    comment: {
+        type: String
+    }
+}, 
+{
+    timestamps: true
+})
+
+const missionerSchema = new Schema({
+    name: {
+        type: String, 
+        required: true,
+    },
+    stars: {
+        type: [starSchema]
+    }
+})
+
 const missionSchema = new Schema({
     user: {
         type: String,
+        required: true
     },
     title: {
         type: String,
@@ -38,20 +48,17 @@ const missionSchema = new Schema({
     },
     missioners: {
         type: [missionerSchema],
-        required: true,
+        required: true
     },
     target: {
         type: Number,
         required: true,
     },  
     date: {
-        type: {
-            day: String,
-            month: String,
-            year: String
-        }
+        type: Date
     }
-}, {
+}, 
+{
     timestamps: true
 })
 
@@ -73,11 +80,10 @@ const userSchema = new Schema({
     timestamsp: true
 })
 
-
-
 const MissionModel = mongoose.model('Mission', missionSchema)
 const MissionerModel = mongoose.model('Missioner', missionerSchema)
 const UserModel = mongoose.model('User', userSchema)
 const DateModel = mongoose.model('Date', dateSchema)
+const StarModel = mongoose.model('Star', starSchema)
 
-module.exports = {MissionModel, MissionerModel, UserModel, DateModel}
+module.exports = { MissionModel, MissionerModel, UserModel, DateModel, StarModel }

@@ -1,34 +1,41 @@
 <div class="nav">
-    {{#if user}}
+    <div class="nav-logo">
+        <a href="/">
+            <div class="text-logo">let'Star</div>
+        </a>
+    </div>
+    <div class="nav-links">
+        {{#if user}}
             <div class="nav-item user-name">
                 <a href="/missions">
                     {{user.name}}
                 </a>
             </div>
             <div class="nav-item new-mission">
-                <img src="images/star@0,1x.png" alt="mission star 0,1">
+                <img src="/images/star@0,1x.png" alt="mission star 0,1">
                 <a href="/new-mission">
                     nueva misión
                 </a>
             </div>
             <div class="nav-item logout">
-                <img src="images/star@0,1x.png" alt="mission star 0,1">
+                <img src="/images/star@0,1x.png" alt="mission star 0,1">
                 <a href="/logout">
                     logout
                 </a>
             </div>
-    {{else}}
+        {{else}}
             <div class="nav-item login">
-                <img src="images/star@0,1x.png" alt="mission star 0,1">
+                <img src="/images/star@0,1x.png" alt="mission star 0,1">
                 <a href="/login">
                     login
                 </a>
             </div>
             <div class="nav-item register">
-                <img src="images/star@0,1x.png" alt="mission star 0,1">
+                <img src="/images/star@0,1x.png" alt="mission star 0,1">
                 <a href="/register">
                     registro
                 </a>
             </div>
-    {{/if}}
+        {{/if}}
+    </div>
 </div>

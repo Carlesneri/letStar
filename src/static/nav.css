@@ -1,7 +1,8 @@
 .nav{
     display: flex;
-    justify-content: flex-end;
-    padding: .7em;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 .7em;
 }
 .nav-item{
     margin: 0 1em;
@@ -16,4 +17,10 @@
 }
 .user-name a{
     font-size: 1.5em;
+}
+.nav-logo .text-logo {
+    font-size: 2em;
+}
+.nav-links {
+    display: flex;
 }

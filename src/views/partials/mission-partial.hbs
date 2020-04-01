@@ -8,7 +8,7 @@
                 Objetivo: {{target}}
             </div>
             <div class="mission-title-data-item">
-                Quedan: 
+                Quedan:
                 <span id="rem-stars-{{_id}}" class="stars-remind">
                     {{#stars-remind target  missioners}}{{/stars-remind}}
                 </span>
@@ -16,52 +16,90 @@
         </div>
         <div class="trash">
             <form action="/mission/{{_id}}?_method=DELETE" method="POST">
-                <button type="submit" class="custom-btn">
-                    <p class="btn-text">
-                        Eliminar
-                    </p>
+                <button class="empty-button" title="Eliminar">
+                    <i class="fas fa-trash" ></i>
                 </button>
+                {{!-- <button type="submit" class="custom-btn">
+                    <p class="btn-text">
+                    Eliminar
+                    </p>
+                </button> --}}
             </form>
         </div>
     </div>
     <div class="mission-body">
         <div class="missioners">
             {{#each missioners as |missioner|}}
-                <div class="missioner">
-                    <div class="missioner-name">
-                        {{missioner.name}}
+            <div class="missioner">
+                <div class="missioner-name">
+                    {{missioner.name}}
+                </div>
+                <div class="missioner-stars">
+                    <div class="filled-stars">
+                        {{#each missioner.stars as |star|}}
+                            <img src="./images/star@0,5x.png" 
+                            title="{{star.comment}} ({{#stringDate star.updatedAt}}{{/stringDate}})" 
+                            alt="filled-start" 
+                            class="missioner-star active-star"
+                            mission="{{../../_id}}"
+                            missioner="{{../_id}}"
+                            star="{{_id}}"
+                            onclick="editStar(event)">
+                        {{/each}}
+                        {{!-- {{#times missioner.stars.length  0}}
+                        <button type="submit" name="missioner" value={{missioner.name}} id="star-button" class="star-btn">
+                                        <img src="./images/star@0,5x.png" alt="filled-start" name={{../../_id}} missioner={{missioner.name}} class="missioner-star active-star" onclick="active(event)">
+                                    </button>
+                            <img src="./images/star@0,5x.png" alt="filled-start" class="missioner-star active-star">
+                        {{/times}} --}}
                     </div>
-                    <div class="missioner-stars">
-                        {{#times missioner.stars  0}}
-                            {{!-- <form 
-                                action="/mission/remove-star/{{../../_id}}?_method=PUT" 
-                                missionId={{../../_id}}
-                                method="POST"
-                                class="star-form"
-                            >    --}}
-                                {{!-- <input type="hidden" name="missionId" value={{../../_id}}>
-                                <input type="hidden" name="action" value="remove-star"> --}}
-                                <button type="submit" name="missioner" value={{missioner.name}} id="star-button" class="star-btn">
-                                    <img src="./images/star@0,5x.png" alt="filled-start" name={{../../_id}} missioner={{missioner.name}} class="missioner-star active-star" onclick="active(event)">
+                    <div class="add-remove-star">
+                        {{#addStar ../target  ../missioners  missioner.stars.length}}
+                            <div class="add-star">
+                                {{!-- <form action="/missions/?_method=PATCH" method="POST">
+                                    <input type="hidden" name="missionId" value={{../../_id}}>
+                                    <input type="hidden" name="missionerId" value={{../_id}}>
+                                    <button type="submit" class="custom-btn">
+                                        <p class="btn-text">
+                                            Añadir estrella
+                                        </p>
+                                    </button>
+                                </form> --}}
+                                <a class="btn-text" 
+                                mission={{../../_id}} 
+                                missioner={{../_id}} 
+                                onclick="addStar(event)">
+                                    Añadir estrella
+                                </a>
+                            </div>
+                        {{/addStar}}
+                        {{!-- {{#removeStar missioner.stars.length}}
+                            <form action="/mission/remove/{{missioner._id}}?_method=PATCH" method="POST">
+                                <button type="submit" class="custom-btn">
+                                    <p class="btn-text">
+                                        Quitar estrella
+                                    </p>
                                 </button>
-                            {{!-- </form> --}}
-                        {{/times}}
-                        {{#times ../target  missioner.stars}}
-                            {{!-- <form 
-                                action="/mission/add-star/{{../../_id}}?_method=PUT" 
-                                missionId={{../../_id}}
-                                method="POST"
-                                class="star-form"
-                            > --}}
-                                {{!-- <input type="hidden" name="missionId" value={{../../_id}}>
-                                <input type="hidden" name="action" value="add-star"> --}}
+                            </form>
+
+                            <div class="remove-star">
+                                <a class="btn-text" 
+                                mission={{../../_id}} 
+                                missioner={{../_id}} 
+                                onclick="removeStar(event)">
+                                    Quitar estrella
+                                </a>
+                            </div>
+                        {{/removeStar}} --}}
+                    </div>
+                    {{!-- {{#times ../target  missioner.stars}}
                                 <button type="submit" name="missioner" value={{missioner.name}} id="star-button" class="star-btn" >
                                     <img src="./images/star@0,5x.png" alt="empty-star" name={{../../_id}} missioner={{missioner.name}} class="missioner-star {{missioner.name}}" onclick="active(event)">
                                 </button>
-                            {{!-- </form> --}}
-                        {{/times}}
-                    </div>
+                        {{/times}} --}}
+
                 </div>
+            </div>
             {{/each}}
         </div>
         <div class="desc">
@@ -69,12 +107,13 @@
         </div>
         <div class="date">
             {{#if date }}
-                Fecha tope: {{date.day}} - {{date.month}} - {{date.year}}
+            {{#dateFormat date}}
+            {{/dateFormat}}
             {{/if}}
         </div>
-        <div class="finished" id="finished-{{_id}}">
-            {{#finished target  missioners}}
-            {{/finished}}
+        <div>
+            {{!-- {{#finished target  missioners  _id}}
+            {{/finished}} --}}
         </div>
     </div>
 </div>
