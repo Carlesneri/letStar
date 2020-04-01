@@ -6,11 +6,12 @@ async function addStar(event){
         html: 
         `<h2>Nueva estrella</h2>
         <div class="new-star-form">
-            <input type="text" id="star-comment" class="comment" autofocus placeholder="Comentario"></input>
-            <a class="btn-text" onclick="newStar(event)" missionId=${mission} missionerId=${missioner} >Guardar</>
+        <input type="text" id="star-comment" class="comment" autofocus placeholder="Comentario"></input>
+        <a class="btn-text" onclick="newStar(event)" missionId=${mission} missionerId=${missioner} >Guardar</>
         </div>`,
         showConfirmButton: false
     })
+    event.target.style.visibility = 'visible' 
     // const comment = getComment.value || null
 }
 
@@ -42,11 +43,13 @@ async function editStar(event) {
     const mission = event.target.getAttribute("mission")
     const missioner = event.target.getAttribute("missioner")
     const star = event.target.getAttribute("star")
+    const date = event.target.getAttribute("date")
     const comment = await getComment(star) || ''
     await Swal.fire({
         html:
         `<h2>Editar estrella</h2>
         <div><textarea type="text" id="comment" class="comment">${comment}</textarea></div>
+        <div>${date}</div>
         <div class="edit-star-form">
             <a class="btn-text" onclick="removeStar(event)" missionId=${mission} missionerId=${missioner} starId=${star}>Eliminar Estrella</>
             <a class="btn-text" onclick="saveStar(event)" missionId=${mission} missionerId=${missioner} starId=${star}>Guardar Cambios</a>

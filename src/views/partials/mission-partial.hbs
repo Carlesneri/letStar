@@ -19,11 +19,6 @@
                 <button class="empty-button" title="Eliminar">
                     <i class="fas fa-trash" ></i>
                 </button>
-                {{!-- <button type="submit" class="custom-btn">
-                    <p class="btn-text">
-                    Eliminar
-                    </p>
-                </button> --}}
             </form>
         </div>
     </div>
@@ -44,27 +39,13 @@
                             mission="{{../../_id}}"
                             missioner="{{../_id}}"
                             star="{{_id}}"
+                            date="{{#stringDate star.updatedAt}}{{/stringDate}}"
                             onclick="editStar(event)">
                         {{/each}}
-                        {{!-- {{#times missioner.stars.length  0}}
-                        <button type="submit" name="missioner" value={{missioner.name}} id="star-button" class="star-btn">
-                                        <img src="./images/star@0,5x.png" alt="filled-start" name={{../../_id}} missioner={{missioner.name}} class="missioner-star active-star" onclick="active(event)">
-                                    </button>
-                            <img src="./images/star@0,5x.png" alt="filled-start" class="missioner-star active-star">
-                        {{/times}} --}}
                     </div>
                     <div class="add-remove-star">
                         {{#addStar ../target  ../missioners  missioner.stars.length}}
                             <div class="add-star">
-                                {{!-- <form action="/missions/?_method=PATCH" method="POST">
-                                    <input type="hidden" name="missionId" value={{../../_id}}>
-                                    <input type="hidden" name="missionerId" value={{../_id}}>
-                                    <button type="submit" class="custom-btn">
-                                        <p class="btn-text">
-                                            Añadir estrella
-                                        </p>
-                                    </button>
-                                </form> --}}
                                 <a class="btn-text" 
                                 mission={{../../_id}} 
                                 missioner={{../_id}} 
@@ -73,31 +54,7 @@
                                 </a>
                             </div>
                         {{/addStar}}
-                        {{!-- {{#removeStar missioner.stars.length}}
-                            <form action="/mission/remove/{{missioner._id}}?_method=PATCH" method="POST">
-                                <button type="submit" class="custom-btn">
-                                    <p class="btn-text">
-                                        Quitar estrella
-                                    </p>
-                                </button>
-                            </form>
-
-                            <div class="remove-star">
-                                <a class="btn-text" 
-                                mission={{../../_id}} 
-                                missioner={{../_id}} 
-                                onclick="removeStar(event)">
-                                    Quitar estrella
-                                </a>
-                            </div>
-                        {{/removeStar}} --}}
                     </div>
-                    {{!-- {{#times ../target  missioner.stars}}
-                                <button type="submit" name="missioner" value={{missioner.name}} id="star-button" class="star-btn" >
-                                    <img src="./images/star@0,5x.png" alt="empty-star" name={{../../_id}} missioner={{missioner.name}} class="missioner-star {{missioner.name}}" onclick="active(event)">
-                                </button>
-                        {{/times}} --}}
-
                 </div>
             </div>
             {{/each}}
@@ -112,8 +69,6 @@
             {{/if}}
         </div>
         <div>
-            {{!-- {{#finished target  missioners  _id}}
-            {{/finished}} --}}
         </div>
     </div>
 </div>

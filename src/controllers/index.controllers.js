@@ -60,6 +60,7 @@ indexCtrl.renderMissions = async (req, res) => {
     if(req.user){
         const missions = await getMissions(req.user._id)        
         if (missions.length > 0){
+            
             res.render('missions', {missions})
         }else res.render('no-missions')    
     }else{

@@ -11,7 +11,7 @@ const privateKey = fs.readFileSync(path.join(__dirname, '../SSL/private.key'), '
 const certificate = fs.readFileSync(path.join(__dirname, '../SSL/certificate.crt'), 'utf8')
 const caBundle = fs.readFileSync(path.join(__dirname, '../SSL/ca_bundle.crt'), 'utf8')
 
-if(process.env.DEVELOPMENT = 'true'){
+if(process.env.DEVELOPMENT === 'true'){
     http.createServer(app)
     .listen(app.get('PORT'), () => console.log('Server listening on port ', app.get('PORT')))
 }else{

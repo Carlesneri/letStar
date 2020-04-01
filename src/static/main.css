@@ -55,8 +55,8 @@ a:hover{
     outline: none;
     margin: 10px;
     border: none;
-    border-radius: 3em;
-    padding: 0.69em;
+    border-radius: .33em;
+    padding: 0.66em;
     text-decoration: none;
     border: 2px solid var(--lighter-color);
 }
@@ -66,4 +66,30 @@ a:hover{
     outline: none;
     cursor: pointer;
 }
+.form-container{
+    max-width: 20em;
+    margin: 0 auto;
+}
+.form-container form{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;    
+}
+input, textarea{
+    width: 100%;
+    color: var(--light-color);
+    outline: none;
+    margin: 10px;
+    border: none;
+    border-radius: .33em;
+    padding: .66em;
+    text-decoration: none;
+    border: 2px solid var(--lighter-color);
+    background: white;
+}
+input::placeholder, textarea::placeholder{
+    color: var(--light-color);
+}
+
 

@@ -1,4 +1,5 @@
 const Handlebars = require('handlebars')
+const moment = require('moment')
 
 Handlebars.registerHelper('times', function(total, active, block) {
     var accum = '';
@@ -9,7 +10,8 @@ Handlebars.registerHelper('times', function(total, active, block) {
 
 Handlebars.registerHelper('stars-remind', function(target, missioners, block) {
     var accum = 0;
-    if(missioners) missioners = Array.from(missioners)
+    console.log(missioners)
+    // if(missioners) missioners = Array.from(missioners)
     missioners.forEach(missioner => accum += missioner.stars.length)
     return target - accum;  
 });
@@ -19,21 +21,24 @@ Handlebars.registerHelper('finished', function(target, missioners, _id, block) {
     for(let i = 0; i < missioners.length; i++){
         accum += missioners[i].stars
     }
-    // missioners.forEach(el => accum += el.stars)
+    missioners.forEach(el => accum += el.stars)
     const remindStars =  target - accum;
     if (remindStars > 0) return `<div class="unfinished" id="finished-${_id}">Conseguido!</div>`
     else return `<div class="finished" id="finished-${_id}">Conseguido!</div>`
 });
 
 Handlebars.registerHelper('stringDate', function(date, block) {
-    return date.toLocaleString()
+    const momentDate = moment(date).format('DD[-]MM[-]YYYY, h:mm a')
+    return momentDate
 });
 
 Handlebars.registerHelper('dateFormat', function(date, block) {
     const today = new Date()
-    const dateSplit = date.toLocaleDateString().split("-")
+    const momentDate = moment(date).format('DD[-]MM[-]YYYY')
+
+    //const dateSplit = date.toLocaleDateString().split("-")
     const diasRestantes = Math.ceil((date - today)/1000/60/60/24)
-    const dataTope = `Fecha tope: ${dateSplit[2]}-${dateSplit[1]}-${dateSplit[0]}`
+    const dataTope = `Fecha tope: ${momentDate}`
     let diasRestText = null
     date - today > 0 ? diasRestText = `Quedan ${diasRestantes} dias`
     : diasRestText = `Fecha superada`
