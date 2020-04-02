@@ -51,8 +51,8 @@
 .add-missioner{
     text-align: center;
 }
-.target{
-    width: 3em;
+.target input{
+    width: 5em;
 }
 .target-container {
     display: flex;

@@ -15,11 +15,14 @@
             </div>
         </div>
         <div class="trash">
-            <form action="/mission/{{_id}}?_method=DELETE" method="POST">
-                <button class="empty-button" title="Eliminar">
-                    <i class="fas fa-trash" ></i>
+            {{!-- <form action="/mission/{{_id}}?_method=DELETE" method="POST"> --}}
+                <button class="empty-button" >
+                    <i class="fas fa-trash" 
+                    title="Eliminar"
+                    mission="{{_id}}" 
+                    onclick="removeMissionHandler(event)"></i>
                 </button>
-            </form>
+            {{!-- </form> --}}
         </div>
     </div>
     <div class="mission-body">
@@ -39,6 +42,7 @@
                             mission="{{../../_id}}"
                             missioner="{{../_id}}"
                             star="{{_id}}"
+                            comment="{{star.comment}}" 
                             date="{{#stringDate star.updatedAt}}{{/stringDate}}"
                             onclick="editStar(event)">
                         {{/each}}

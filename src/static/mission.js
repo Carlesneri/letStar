@@ -1,3 +1,50 @@
+async function removeMissionHandler(event){
+    const mission = event.target.getAttribute("mission")
+    Swal.fire({
+        html: 
+            `<h2>¿Quieres eliminar la misión?</h2>
+            <div class="swal-remove-mission">
+                <a mission=${mission} onclick="deleteMission(event)">Sí</a>
+                <a onclick="closeSwal()">Cancelar</a>
+            </div>`,
+        showConfirmButton: false
+    })
+}
+
+function closeSwal(){
+    return Swal.close()
+}
+
+async function deleteMission(event){
+    const mission = event.target.getAttribute("mission")
+    closeSwal()
+    Swal.fire({
+        html: 
+            `<h2>Eliminando</h2>`,
+        showConfirmButton: false,
+    })
+    Swal.showLoading();
+    try{
+        const response = await fetch('/mission/'+ mission, {
+            method: "DELETE"
+        })
+        const missionDeleted = await response.json()
+        await Swal.fire({
+            html: `Misión "${missionDeleted.title}" eliminada`,
+            showConfirmButton: false,
+            timer: 1300,
+        })
+    }catch(err){
+        console.log('Error al eliminar misión. Error: ', err);
+        await Swal.fire({
+            html: "Error al eliminar misión",
+            showConfirmButton: false,
+            timer: 1300,
+        })
+    }
+    location.reload()
+}
+
 async function addStar(event){   
     event.target.style.visibility = 'hidden' 
     const mission = event.target.getAttribute("mission")
@@ -12,13 +59,18 @@ async function addStar(event){
         showConfirmButton: false
     })
     event.target.style.visibility = 'visible' 
-    // const comment = getComment.value || null
 }
 
 async function newStar(event) {
     const missionId = event.target.getAttribute("missionId")
     const missionerId = event.target.getAttribute("missionerId")
-    const comment = document.getElementById("star-comment").value
+    const comment = document.getElementById("star-comment").value || null
+    Swal.fire({
+        html: 
+            `<h2>Guardando</h2>`,
+        showConfirmButton: false,
+    })
+    Swal.showLoading();
     try{
         const data = {missionId, missionerId, comment}
         await fetch("/star", {
@@ -36,6 +88,7 @@ async function newStar(event) {
             timer: 1300,
         })
     }
+    Swal.close();
     location.reload()
 }
 
@@ -44,7 +97,8 @@ async function editStar(event) {
     const missioner = event.target.getAttribute("missioner")
     const star = event.target.getAttribute("star")
     const date = event.target.getAttribute("date")
-    const comment = await getComment(star) || ''
+    const comment = event.target.getAttribute("comment")
+    //const comment = await getComment(star) || ''
     await Swal.fire({
         html:
         `<h2>Editar estrella</h2>
@@ -60,10 +114,16 @@ async function editStar(event) {
 
 async function saveStar(event) {
     const newComment = document.getElementById("comment").value
+    const missionId = event.target.getAttribute("missionId")
+    const missionerId = event.target.getAttribute("missionerId")
+    const starId = event.target.getAttribute("starId")   
+    Swal.fire({
+        html: 
+            `<h2>Guardando</h2>`,
+        showConfirmButton: false,
+    })
+    Swal.showLoading()
     try{
-        const missionId = event.target.getAttribute("missionId")
-        const missionerId = event.target.getAttribute("missionerId")
-        const starId = event.target.getAttribute("starId")   
         const data = {missionId, missionerId, starId, newComment}
         await fetch("/star", {
             method: "PATCH",
@@ -80,6 +140,7 @@ async function saveStar(event) {
             timer: 1300,
         })
     }
+    Swal.close()
     location.reload()
 }
 
@@ -87,8 +148,14 @@ async function removeStar(event){
     const missionId = event.target.getAttribute("missionId")
     const missionerId = event.target.getAttribute("missionerId")
     const starId = event.target.getAttribute("starId")
-    const data = { missionId, missionerId, starId }
+    Swal.fire({
+        html: 
+            `<h2>Guardando</h2>`,
+        showConfirmButton: false,
+    })
+    Swal.showLoading()
     try {
+        const data = { missionId, missionerId, starId }
         await fetch('/star', {
             method: "DELETE",
             body: JSON.stringify(data),
@@ -99,6 +166,7 @@ async function removeStar(event){
     } catch(error) {
         console.log(error)        
     }
+    Swal.close()
     location.reload()
 }
 

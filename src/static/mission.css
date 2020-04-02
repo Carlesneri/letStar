@@ -2,11 +2,11 @@
     box-shadow: 0px 2px 3px 1px var(--lighter-color);
     border: 1px solid var(--light-color);
     border-radius: 10px;
-    padding: 20px;
+    padding: 1em;
     margin: 2em;
 }
 .missioner {
-    margin: 10px;
+    margin: 1em;
 }
 .mission-title{
     display: flex;
@@ -29,15 +29,15 @@
 }
 .missioner-stars{
     display: flex;
-    justify-content: space-between;
+    justify-content: space-around;
     align-items: center;
 }
 .missioner-star {
     cursor: pointer;
 }
-.filled-stars {
+/* .filled-stars {
     width: 70%;
-}
+} */
 .add-remove-star {
     min-height: 3em;
     width: 30%;
@@ -140,10 +140,6 @@
         justify-content: space-between;
         align-items: center;
     }
-    /* .mission-title-data{
-        display: flex;
-        
-    } */
     .missioner{
         flex-direction: column;
     }
@@ -172,4 +168,10 @@
     resize: vertical;
     width: 70%;
     overflow: hidden;
+}
+.swal-remove-mission {
+    margin: 1em;
+}
+.swal-remove-mission a {
+    margin: 0 2em;
 }

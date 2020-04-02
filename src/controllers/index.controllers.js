@@ -74,9 +74,16 @@ indexCtrl.renderNoMissions = (req, res) => {
 }
 
 indexCtrl.deleteMission = async (req, res) => {
-    await MissionModel.findByIdAndDelete(req.params.id)
-    req.flash('success_msg', 'Misión eliminada')
-    res.redirect('/missions')
+    try{
+        const deletedMission = await MissionModel.findByIdAndDelete(req.params.id)
+        req.flash('success_msg', 'Misión eliminada')
+        res.status(200).json(deletedMission)
+        
+    } catch(err) {
+        console.log(err);
+        req.flash('error_msg', 'Error al eliminar misión')
+        res.status(400).redirect('/missions')
+    }
 }
 
 indexCtrl.addStar = async (req, res) => {
@@ -89,6 +96,7 @@ indexCtrl.addStar = async (req, res) => {
         const missionerIndex =  missionFound.missioners.findIndex(el => el._id == missionerId)
         missionFound.missioners[missionerIndex].stars.push(newStar)        
         const updatedMission = await missionFound.save()
+        req.flash('success_msg', 'Estrella añadida')
         res.status(200).json(updatedMission)
     }catch(err) {
         console.log(err);
