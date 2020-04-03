@@ -88,5 +88,6 @@ input, textarea{
 input::placeholder, textarea::placeholder{
     color: var(--light-color);
 }
-
-
+.custom-icon:hover{
+    text-shadow: 1px 1px var(--light-color);
+}
