@@ -16,7 +16,8 @@ const {renderIndex,
     getMission,
     getStar,
     deleteStar,
-    editStar
+    editStar,
+    editMission
 } = require('../controllers/index.controllers')
 
 const router = Router()
@@ -33,9 +34,6 @@ router.get('/no-missions', renderNoMissions)
 
 router.delete('/mission/:id', isUser, deleteMission)
 
-
-// router.patch('/mission/remove-star', isUser, removeStar)
-
 router.get('/login', loginForm)
 
 router.get('/register', registerForm)
@@ -47,6 +45,8 @@ router.post('/register', register)
 router.get('/logout', logout)
 
 router.get('/mission/:id', isUser, getMission)
+
+router.patch('/mission', isUser, editMission)
 
 router.get('/star/:id', isUser, getStar)
 

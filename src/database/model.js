@@ -56,6 +56,9 @@ const missionSchema = new Schema({
     },  
     date: {
         type: Date
+    },
+    viewers: {
+        type: [String]
     }
 }, 
 {

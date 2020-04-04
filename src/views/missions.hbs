@@ -4,5 +4,11 @@
     {{#each missions as |mission|}}
         {{> mission-partial mission}}
     {{/each}}
+    {{#each viewerMissions as |mission|}}
+        {{> viewerMission mission}}
+    {{/each}}
+    <div class="missions-new-mission">
+        <a href="/new-mission">Crear misión nueva</a>
+    </div>
 </div>
 {{>footer}}

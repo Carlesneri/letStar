@@ -1,3 +1,12 @@
 .missions{
     min-width: 300px;
 }
+.missions-new-mission {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.missions-new-mission a {
+    font-size: 1.8em;
+}

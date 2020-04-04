@@ -175,3 +175,16 @@
 .swal-remove-mission a {
     margin: 0 2em;
 }
+.title-buttons{
+    display: flex;
+}
+.viewers, .trash{
+    margin: 0 0.33em;
+}
+.viewers-info {
+    font-size: .8em;
+    margin: .5em;
+}
+.is-email{
+    color: red;
+}

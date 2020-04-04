@@ -176,3 +176,66 @@ async function getComment(starId) {
     const {comment} = star.star
     return comment   
 }
+
+function viewerMissionHandler(missionId){
+    Swal.fire({
+        html:
+        `<h2>Compartir misión</h2>
+        <p class="viewers-info">Sólo tú puedes editar la misión</p>
+        <input type="email" id="missionViewer" placeholder="Email"></input> 
+        <div id="isEmail" class="is-email"></div>       
+        <a class="btn-text" onclick="shareMission('${missionId}')">Compartir</a>
+        </div>`,
+        showConfirmButton: false,
+    })    
+}
+    
+async function shareMission(missionId){
+    const missionViewerInput = document.getElementById("missionViewer")
+    const viewer = missionViewerInput.value.trim()
+    const isEmail = validateEmail(viewer)
+    const isEmailNode = document.getElementById("isEmail")
+    if(!isEmail){
+        isEmailNode.innerText = "Email no válido"
+        missionViewerInput.focus()
+    }    
+    else{
+        isEmailNode.innerText = ""
+        Swal.showLoading()
+        try{
+            const data = {missionId, viewer}
+            await fetch("/mission", {
+                method: "PATCH",
+                body: JSON.stringify(data),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            Swal.close()
+            location.reload()        
+        }catch(err){
+            console.log('Error al compartir misión. Error: ', err);
+            Swal.fire({
+                html: "Error compartir misión",
+                showConfirmButton: false,
+                timer: 1300,
+            })
+        }
+        Swal.close()
+        location.reload()
+    }    
+}
+
+function validateEmail(email){
+    const emailRe = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+    return emailRe.test(email)
+}
+
+function showStarInfo(comment, date){
+    Swal.fire({
+        html: `<div>${comment}</div>
+            <div>${date}</div>
+            <a class="btn-text" onclick="Swal.close()">Cerrar</a>`,
+        showConfirmButton: false
+    })
+}

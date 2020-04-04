@@ -1,5 +1,5 @@
 const db = require('mongoose', {'useFindAndModify': false})
-const { ObjectId } = db.Types
+// const { ObjectId } = db.Types
 const bcrypt = require('bcryptjs')
 const { MissionModel, UserModel, MissionerModel, StarModel } = require('../database/model')
 require('dotenv').config()
@@ -7,7 +7,7 @@ require('../static/hbsHelpers')
 const DB_URI = process.env.DB_URI
 const validate = require('../validate/validate') 
 const passport = require('passport')
-const {getTotalStars, getMissions} = require('../services')
+const { getMissions, getViewerMissions } = require('../services')
 
 db.connect(DB_URI, {
     useNewUrlParser: true,
@@ -59,9 +59,9 @@ indexCtrl.addNewMission = async (req, res) => {
 indexCtrl.renderMissions = async (req, res) => {
     if(req.user){
         const missions = await getMissions(req.user._id)        
-        if (missions.length > 0){
-            
-            res.render('missions', {missions})
+        const viewerMissions = await getViewerMissions(req.user.email)  
+        if (missions.length > 0 || viewerMissions.length > 0){    
+            res.render('missions', { missions, viewerMissions })
         }else res.render('no-missions')    
     }else{
         req.flash('error_msg', 'No se encuentra usuario')
@@ -76,7 +76,7 @@ indexCtrl.renderNoMissions = (req, res) => {
 indexCtrl.deleteMission = async (req, res) => {
     try{
         const deletedMission = await MissionModel.findByIdAndDelete(req.params.id)
-        req.flash('success_msg', 'Misión eliminada')
+        // req.flash('success_msg', 'Misión eliminada')
         res.status(200).json(deletedMission)
         
     } catch(err) {
@@ -195,11 +195,8 @@ indexCtrl.editStar = async (req, res) => {
     try{
         const { missionId, missionerId, starId, newComment } = req.body
         const missionFound = await MissionModel.findById(missionId)
-        console.log('mission', missionFound);
         const missionerIndex = missionFound.missioners.findIndex(missioner => missioner._id == missionerId)
         const starIndex = missionFound.missioners[missionerIndex].stars.findIndex(star => star._id == starId)
-        console.log('mission', missionerIndex);
-        console.log('mission', starIndex);
         missionFound.missioners[missionerIndex].stars[starIndex].comment = newComment
         const missionUpdated = await missionFound.save()
         req.flash('success_msg', 'Estrella editada')
@@ -207,6 +204,21 @@ indexCtrl.editStar = async (req, res) => {
     } catch(err) {
         console.log(err)
         req.flash('error_msg', 'No se ha podido editar estrella')
+        res.status(400).redirect('/missions')
+    }
+}
+
+indexCtrl.editMission = async(req, res) => {
+    try{
+        console.log(req.body)
+        const { missionId, viewer } = req.body
+        const mission = await MissionModel.updateOne({_id: missionId},
+            {$push: {viewers: viewer}}, {new: true})
+        req.flash('success_msg', 'Misión compartida')
+        res.status(200).json(mission)
+    } catch(err){
+        console.log(err)
+        req.flash('error_msg', 'No se ha podido compartir misión')
         res.status(400).redirect('/missions')
     }
 }

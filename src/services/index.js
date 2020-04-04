@@ -1,17 +1,11 @@
-const { MissionModel, MissionerModel, StarModel } = require('../database/model')
+const { MissionModel } = require('../database/model')
 
 async function getMissions(id) {
     return await MissionModel.find({ user:id })
-    
-    // for(let i in missions){
-    //     missioners = await getModelDocs(MissionerModel, 'mission', missions[i]._id)
-    //     for(let i in missioners){
-    //         stars = await getModelDocs(StarModel, 'missioner', missioners[i]._id)
-    //         missioners[i] = {...missioners[i], stars}
-    //     }
-    //     missions[i] = {...missions[i], missioners}
-    // }
-    // console.log('getMissions', missions)
+}
+
+async function getViewerMissions(email) {
+    return await MissionModel.find({ viewers: email })
 }
 
 async function getModelDocs(model, key, id){
@@ -26,4 +20,4 @@ function getTotalStars(mission) {
     return accum;  
 }
 
-module.exports = { getMissions, getTotalStars }
+module.exports = { getMissions, getTotalStars, getViewerMissions }
