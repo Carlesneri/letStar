@@ -1,4 +1,4 @@
-const { MissionModel } = require('../database/model')
+const { MissionModel, UserModel } = require('../database/model')
 
 async function getMissions(id) {
     return await MissionModel.find({ user:id })
@@ -20,4 +20,14 @@ function getTotalStars(mission) {
     return accum;  
 }
 
-module.exports = { getMissions, getTotalStars, getViewerMissions }
+async function getUser(id) {    
+    const user = await UserModel.findById(id)
+    return { name: user.name, email: user.email }
+    
+}
+
+async function removeViewer(id, viewer){
+    return await MissionModel.updateOne({_id: id}, {$pull: {viewers: viewer}}, {new: true})
+}
+
+module.exports = { getMissions, getTotalStars, getViewerMissions, getUser, removeViewer }

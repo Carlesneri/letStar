@@ -15,29 +15,25 @@
             </div>
         </div>
         <div class="title-buttons">
-            <div class="lock">
-                    <i class="fas fa-lock" 
-                    title="No puedes editar"
-                    {{!-- mission="{{_id}}" 
-                    onclick="removeMissionHandler(event)" --}}
-                    ></i>
-            </div>
-            {{!-- <div class="viewers">
+            <div class="viewers">
                 <button class="empty-button" >
                     <i class="fas fa-users custom-icon" 
                     title="Compartir con otro usuario"
                     mission="{{_id}}" 
-                    onclick="viewerMissionHandler('{{_id}}')"></i>
+                    onclick="viewerMissionHandler('{{_id}}', '{{viewers}}')"></i>
                 </button>
             </div>
             <div class="trash">
+                {{!-- <form action="/mission/{{_id}}?_method=DELETE" method="POST"> --}}
                     <button class="empty-button" >
                         <i class="fas fa-trash custom-icon" 
-                        title="Eliminar"
+                        title="Eliminar misión"
                         mission="{{_id}}" 
                         onclick="removeMissionHandler(event)"></i>
                     </button>
-            </div> --}}
+                {{!-- </form> --}}
+            </div>
+
         </div>
     </div>
     <div class="mission-body">
@@ -59,11 +55,10 @@
                             star="{{_id}}"
                             comment="{{star.comment}}" 
                             date="{{#stringDate star.updatedAt}}{{/stringDate}}"
-                            onclick="showStarInfo('{{star.comment}}', '{{#stringDate star.updatedAt}}{{/stringDate}}')"
-                            >
+                            onclick="editStar(event)">
                         {{/each}}
                     </div>
-                    {{!-- <div class="add-remove-star">
+                    <div class="add-remove-star">
                         {{#addStar ../target  ../missioners  missioner.stars.length}}
                             <div class="add-star">
                                 <a class="btn-text" 
@@ -74,7 +69,7 @@
                                 </a>
                             </div>
                         {{/addStar}}
-                    </div> --}}
+                    </div>
                 </div>
             </div>
             {{/each}}

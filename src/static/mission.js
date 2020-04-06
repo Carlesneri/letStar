@@ -1,3 +1,7 @@
+function closeSwal(){
+    return Swal.close()
+}
+
 async function removeMissionHandler(event){
     const mission = event.target.getAttribute("mission")
     Swal.fire({
@@ -9,10 +13,6 @@ async function removeMissionHandler(event){
             </div>`,
         showConfirmButton: false
     })
-}
-
-function closeSwal(){
-    return Swal.close()
 }
 
 async function deleteMission(event){
@@ -98,11 +98,10 @@ async function editStar(event) {
     const star = event.target.getAttribute("star")
     const date = event.target.getAttribute("date")
     const comment = event.target.getAttribute("comment")
-    //const comment = await getComment(star) || ''
     await Swal.fire({
         html:
         `<h2>Editar estrella</h2>
-        <div><textarea type="text" id="comment" class="comment">${comment}</textarea></div>
+        <div><input type="text" id="comment" class="comment" value="${comment}"></input></div>
         <div>${date}</div>
         <div class="edit-star-form">
             <a class="btn-text" onclick="removeStar(event)" missionId=${mission} missionerId=${missioner} starId=${star}>Eliminar Estrella</>
@@ -177,17 +176,36 @@ async function getComment(starId) {
     return comment   
 }
 
-function viewerMissionHandler(missionId){
+function viewerMissionHandler(missionId, viewers){
     Swal.fire({
         html:
         `<h2>Compartir misión</h2>
         <p class="viewers-info">Sólo tú puedes editar la misión</p>
-        <input type="email" id="missionViewer" placeholder="Email"></input> 
+        <ul class="viewers" id="viewersUl"></ul>
+        <input class="email-share-mission" type="email" id="missionViewer" placeholder="Email"></input> 
         <div id="isEmail" class="is-email"></div>       
         <a class="btn-text" onclick="shareMission('${missionId}')">Compartir</a>
         </div>`,
         showConfirmButton: false,
     })    
+    const viewersArr = viewers.split(',')   
+    const viewersUl = document.getElementById("viewersUl")
+    if (viewers && viewersArr.length > 0){
+        viewersUl.innerHTML = `<div>Compartido con: </div>`
+        viewersArr.forEach(viewer => {
+            viewersUl.innerHTML += 
+            `
+                <li>
+                    <div>
+                        ${viewer}
+                    </div>
+                    <i class="fas fa-trash custom-icon" 
+                    title="Eliminar"
+                    onclick="removeViewer('${missionId}', '${viewer}')"></i>
+                </li>
+            `
+        })
+    }
 }
     
 async function shareMission(missionId){
@@ -204,7 +222,7 @@ async function shareMission(missionId){
         Swal.showLoading()
         try{
             const data = {missionId, viewer}
-            await fetch("/mission", {
+            await fetch("/viewers", {
                 method: "PATCH",
                 body: JSON.stringify(data),
                 headers: {
@@ -226,6 +244,32 @@ async function shareMission(missionId){
     }    
 }
 
+async function removeViewer(id, viewer){
+    const missionId = id
+    Swal.showLoading()
+    try{
+        const data = { missionId, viewer }
+        await fetch("/viewers", {
+            method: "DELETE",
+            body: JSON.stringify(data),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        Swal.close()
+        location.reload()        
+    }catch(err){
+        console.log('Error al eliminar usuario. Error: ', err);
+        Swal.fire({
+            html: "Error al eliminar usuario",
+            showConfirmButton: false,
+            timer: 1300,
+        })
+    }
+    Swal.close()
+    location.reload()
+}
+
 function validateEmail(email){
     const emailRe = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
     return emailRe.test(email)
@@ -238,4 +282,63 @@ function showStarInfo(comment, date){
             <a class="btn-text" onclick="Swal.close()">Cerrar</a>`,
         showConfirmButton: false
     })
+}
+
+async function getOwner(id){
+    const response = await fetch(`/user/${id}`)
+    const user = await response.json()
+    Swal.fire({
+        html: 
+            `<div>
+                Compartida por ${user.email}
+            </div>
+            <div>
+                <a onclick="closeSwal()">Cerrar</a>
+            </div>`, 
+        showConfirmButton: false
+    })
+}
+
+async function removeMeAsAViewerHandler(missionId){
+    Swal.fire({
+        html:
+        `
+            <p >¿Quieres eliminar esta misión de tu lista?</p>
+            <div class="remove-viewer">
+                <a class="btn-text" onclick="removeMeAsAViewer('${missionId}')">Sí</a>
+                <a class="btn-text" onclick="closeSwal()">Cancelar</a>
+            </div>
+        `,
+        showConfirmButton: false,
+    })
+}
+
+async function removeMeAsAViewer(missionId){
+    Swal.fire({
+        html: "Eliminado misión de tu lista",
+        showConfirmButton: false
+    })
+    Swal.showLoading()
+    try{
+        const viewer = '_myEmail'
+        const data = { missionId, viewer }
+        await fetch("/viewers", {
+            method: "DELETE",
+            body: JSON.stringify(data),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        Swal.close()
+        location.reload()        
+    }catch(err){
+        console.log('Error al eliminar misión. Error: ', err);
+        Swal.fire({
+            html: "Error al eliminar misión",
+            showConfirmButton: false,
+            timer: 1300,
+        })
+    }
+    Swal.close()
+    location.reload()
 }

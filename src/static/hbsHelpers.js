@@ -10,8 +10,6 @@ Handlebars.registerHelper('times', function(total, active, block) {
 
 Handlebars.registerHelper('stars-remind', function(target, missioners, block) {
     var accum = 0;
-    console.log(missioners)
-    // if(missioners) missioners = Array.from(missioners)
     missioners.forEach(missioner => accum += missioner.stars.length)
     return target - accum;  
 });
@@ -35,8 +33,6 @@ Handlebars.registerHelper('stringDate', function(date, block) {
 Handlebars.registerHelper('dateFormat', function(date, block) {
     const today = new Date()
     const momentDate = moment(date).format('DD[-]MM[-]YYYY')
-
-    //const dateSplit = date.toLocaleDateString().split("-")
     const diasRestantes = Math.ceil((date - today)/1000/60/60/24)
     const dataTope = `Fecha tope: ${momentDate}`
     let diasRestText = null
@@ -61,4 +57,3 @@ Handlebars.registerHelper('removeStar', function(stars, block) {
     if(stars > 0) return block.fn()
     else return null
 });
-

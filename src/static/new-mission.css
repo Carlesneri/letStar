@@ -1,17 +1,18 @@
+.new-mission{
+    margin: 3em auto;
+}
 .create-mission, .add-missioner{
     cursor: pointer;
     display: flex;
     justify-content: center;
     align-items: center;
     margin: 0 auto;
-    /* margin: 10px auto; */
-    /* width: 100%; */
 }
-.new-mission-container{
+/* .new-mission-container{
     width: 100%;
     display: flex;
     justify-content: center;
-}
+} */
 .new-mission-form-title{
     font-size: 1.7em;
 }
@@ -43,10 +44,20 @@
     width: 100%;
     font-size: 1.3em;
 }
+.input-desc{
+    width: 100%;
+}
+.input-desc textarea{
+    resize: none;
+    overflow: hidden;
+}
 .new-mission-missioner{
     display: flex;
     justify-content: center;
     align-items: center;
+}
+.new-mission-missioner-container .missioners{
+    padding: 0;
 }
 .add-missioner{
     text-align: center;
@@ -65,4 +76,15 @@
 }
 .missioners-name{
     text-align: center;
+}
+.date-container label{
+    display: block;
+    width: 100%;
+    text-align: center;
+}
+.date-container .date{
+    padding: 0;
+}
+.input-date {
+    width: 10em;
 }

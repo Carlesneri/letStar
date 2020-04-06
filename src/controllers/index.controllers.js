@@ -1,5 +1,5 @@
 const db = require('mongoose', {'useFindAndModify': false})
-// const { ObjectId } = db.Types
+const { ObjectId } = db.Types
 const bcrypt = require('bcryptjs')
 const { MissionModel, UserModel, MissionerModel, StarModel } = require('../database/model')
 require('dotenv').config()
@@ -7,7 +7,7 @@ require('../static/hbsHelpers')
 const DB_URI = process.env.DB_URI
 const validate = require('../validate/validate') 
 const passport = require('passport')
-const { getMissions, getViewerMissions } = require('../services')
+const { getMissions, getViewerMissions, getUser, removeViewer } = require('../services')
 
 db.connect(DB_URI, {
     useNewUrlParser: true,
@@ -208,18 +208,52 @@ indexCtrl.editStar = async (req, res) => {
     }
 }
 
-indexCtrl.editMission = async(req, res) => {
+indexCtrl.addViewer = async(req, res) => {
     try{
-        console.log(req.body)
         const { missionId, viewer } = req.body
         const mission = await MissionModel.updateOne({_id: missionId},
-            {$push: {viewers: viewer}}, {new: true})
+            {$addToSet: {viewers: viewer}}, {new: true})
         req.flash('success_msg', 'Misión compartida')
         res.status(200).json(mission)
     } catch(err){
         console.log(err)
         req.flash('error_msg', 'No se ha podido compartir misión')
         res.status(400).redirect('/missions')
+    }
+}
+
+indexCtrl.removeViewer = async(req, res) => {
+    try{       
+        let { missionId, viewer } = req.body
+        let message = 'Usuario eliminado'
+        if(viewer === '_myEmail') {
+            viewer = req.user.email
+            message = 'Misión eliminada de mi lista'
+        }
+        const mission = await removeViewer(missionId, viewer)
+        req.flash('success_msg', message)
+        res.status(200).json(mission)
+    } catch(err){
+        console.log(err)
+        req.flash('error_msg', 'No se ha podido eliminar usuario')
+        res.status(400).redirect('/missions')
+    }
+}
+
+indexCtrl.getUser = async(req, res) => {
+    const { id } = req.params
+    try{
+        const user = await getUser(id)
+        if(user) {
+            res.status(200).json(user)
+        }
+        else{
+            res.status(200).json({message: "No se ha encontrado usuario"})
+        }
+    }catch(err){
+        console.log(err)
+        req.flash("error_msg", "Error al obtener usuario")
+        res.redirect("/missions")
     }
 }
 

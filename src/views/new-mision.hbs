@@ -2,7 +2,7 @@
 {{!-- {{>jumbo}} --}}
 {{>nav}}
 {{>messages}}
-    <div class="form-container">
+    <div class="new-mission form-container">
         <form action="/new-mission" method="POST">
             <div class="new-mission-title">
                 <div class="form-title">
@@ -17,7 +17,7 @@
                 <input type="text" name="title" id="title" placeholder="Título" autofocus required>
             </div>
             <div class="new-mission-desc input-desc">
-                <textarea name="desc" id="desc" value="desc" placeholder="Descripción"></textarea>
+                <textarea name="desc" id="desc" placeholder="Descripción" value="desc"></textarea>  
             </div>
             <div class="new-mission-missioner-container">
                 <div class="missioners" id="missioners">

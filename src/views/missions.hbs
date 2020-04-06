@@ -1,11 +1,11 @@
 {{>nav}}
 {{>messages}}
 <div class="missions">
-    {{#each missions as |mission|}}
-        {{> mission-partial mission}}
+    {{#each missions as |missionItem|}}
+        {{> mission missionItem}}
     {{/each}}
-    {{#each viewerMissions as |mission|}}
-        {{> viewerMission mission}}
+    {{#each viewerMissions as |missionItem|}}
+        {{> viewer-mission missionItem}}
     {{/each}}
     <div class="missions-new-mission">
         <a href="/new-mission">Crear misión nueva</a>
