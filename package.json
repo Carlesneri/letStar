@@ -1,7 +1,7 @@
 {
   "name": "letstar-web-app",
-  "version": "1.0.0",
-  "description": "",
+  "version": "1.0.1",
+  "description": "Web app para gestionar objetivos y metas",
   "main": "index.js",
   "scripts": {
     "start": "node src/index.js",
