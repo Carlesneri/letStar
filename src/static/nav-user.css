@@ -1,0 +1,12 @@
+.remove-user{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.remove-user div{
+    margin: 1em;
+}
+.remove-user div a{
+    margin: 0 1em;
+}

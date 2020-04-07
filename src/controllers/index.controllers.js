@@ -7,7 +7,14 @@ require('../static/hbsHelpers')
 const DB_URI = process.env.DB_URI
 const validate = require('../validate/validate') 
 const passport = require('passport')
-const { getMissions, getViewerMissions, getUser, removeViewer } = require('../services')
+const { 
+    getMissions, 
+    getViewerMissions, 
+    getUser, removeViewer, 
+    deleteUser, 
+    updateUserName, 
+    updatePassword 
+} = require('../services')
 
 db.connect(DB_URI, {
     useNewUrlParser: true,
@@ -141,10 +148,6 @@ indexCtrl.register = async (req, res) => {
         req.flash('success_msg', "Usuario creado")
         return res.redirect('/missions')
     })
-    // const token = jwt.sign({_id: userSaved._id}, process.env.TOKEN_SECRET)
-    //res.header('auth-token', token).render('missions')
-    //res.redirect('/missions')
-    //.render('profile', {user: userSaved})
 }
 
 indexCtrl.logout = (req, res) => {
@@ -255,6 +258,76 @@ indexCtrl.getUser = async(req, res) => {
         req.flash("error_msg", "Error al obtener usuario")
         res.redirect("/missions")
     }
+}
+
+indexCtrl.updateUser = async (req, res) => {
+    const { userName, oldPassword, newPassword } = req.body
+    if(userName){
+        let message = validate(userName, null, null)
+        if(message){
+            return res.status(400).render('profile', { userMessage: message })
+        }else{
+            if(userName === req.user.name) {
+                message = 'No has cambiado el nombre de usuario'
+                return res.status(400).render('profile', { userMessage: message })
+            }
+            try{
+                await updateUserName(req.user._id, userName)
+                req.flash('success_msg', 'Nombre de usuario cambiado')
+                res.status(200).redirect("/profile")
+            }catch(err){
+                console.log(err);
+                req.flash('error_msg', 'Error al cambiar nombre de usuario')
+                res.status(400).redirect("/profile")
+            }
+        }
+    }else if(oldPassword || newPassword){
+        console.log(oldPassword, newPassword);
+        
+        let message = validate(null, null, oldPassword)
+        if (message){
+            return res.status(400).render('profile', { passwordMessage: message })
+        }
+        message = validate(null, null, newPassword)
+        if(message){
+            return res.status(400).render('profile', { passwordMessage: message })
+        }
+        const truePassword = bcrypt.compareSync(oldPassword, req.user.password)
+        console.log(truePassword);        
+        if(truePassword){
+            try{
+                const salt = await bcrypt.genSalt(10)
+                const hashedNewPassword = await bcrypt.hash(newPassword, salt)
+                await updatePassword(req.user._id, hashedNewPassword)
+                req.flash('success_msg', 'Se ha cambiado la contraseña')
+                res.status(200).redirect("/login")
+            }catch(err){
+                console.log(err);
+                req.flash('error_msg', 'Error al cambiar contraseña')
+                res.status(400).redirect("/profile")
+            }
+        }
+        req.flash('error_msg', 'La contraseña no es correcta')
+        res.status(400).redirect("/profile")
+    }
+    res.redirect("/profile")
+}
+
+indexCtrl.deleteUser = async(req, res) => {
+    try{
+        await deleteUser(req.body.id)
+        req.logout()
+        req.flash('success_msg', 'Cuenta eliminada')
+        res.status(200).end()
+    }catch(err){
+        console.log(err)
+        req.flash("error_msg", "Error al eliminar cuenta")
+        res.redirect("/missions")
+    }
+}
+
+indexCtrl.renderProfile = (req, res) => {
+    res.status(200).render('profile')
 }
 
 module.exports = indexCtrl;

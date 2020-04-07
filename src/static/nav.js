@@ -6,6 +6,7 @@ downLinksArrow.addEventListener("click", clickArrowHandler)
 function clickArrowHandler(){
     if(!userLinks.classList.contains("down-links")){
         userLinks.classList.add("down-links")
+        downLinksArrow.classList.add("rotate")
         setTimeout(addBodyListener, 1)
     }
 }
@@ -17,6 +18,7 @@ function addBodyListener(){
 function clickBodyHandler(event){
     if(!event.target.classList.contains("down-links")) {
         userLinks.classList.remove("down-links")
+        downLinksArrow.classList.remove("rotate")
     }
     document.body.removeEventListener("click", clickBodyHandler)
 }

@@ -1,28 +1,59 @@
-<div class="nav">
-    <div class="nav-item name">
-        {{user.name}}
+{{>nav}}
+{{>messages}}
+<link rel="stylesheet" href="registerForm.css">
+<div class="form-container">
+    <form action="/user" method="POST">
+        <div class="new-mission-title form-item">
+            <div class="form-title">
+                <label for="title">
+                    <h1 class="new-mission-form-title">
+                        Mi cuenta
+                    </h1>
+                    <h3 class="new-mission-form-title">
+                        {{user.email}}
+                    </h3>
+                </label>
+            </div>
+        </div>
+        <div class="form-item">
+            <input type="text" name="userName" id="name" value={{user.name}} required="true">
+        </div>
+        {{#if userMessage}}
+            <div class="error-message">
+                {{userMessage}}
+            </div>
+        {{/if}}
+        <div class="login-btn-container form-item">
+            <button type="submit" class="custom-btn login-btn">
+                <p class="btn-text">
+                    Guardar nombre de usuario
+                </p>
+            </button>
+        </div>
+    </form>
+    <form action="/user" method="POST">
+        <div class="form-item">
+            <input type="password" name="oldPassword" id="old-password" placeholder="Contraseña actual">
+        </div>
+        <div class="form-item">
+            <input type="password" name="newPassword" id="new-password" placeholder="Contraseña nueva">
+        </div>
+        {{#if passwordMessage}}
+            <div class="error-message">
+                {{passwordMessage}}
+            </div>
+        {{/if}}
+        <div class="login-btn-container form-item">
+            <button type="submit" class="custom-btn login-btn">
+                <p class="btn-text">
+                    Guardar contraseña
+                </p>
+            </button>
+        </div>
+    </form>
+    <div>
+        <a onclick="removeUserHandler('{{user._id}}')">Eliminar la cuenta</a>
     </div>
-    <div class="nav-item user">
-        <img src="images/star@0,1x.png" alt="mission star 0,1">
-        <a href="/logout">
-            logout
-        </a>
-    </div>
-</div>
-{{>jumbo}}
-<div class="new-mission-container">
-    <a href="/new-mission" class="custom-btn new-mission-btn">
-        <p class="btn-text new-mission-btn-text">
-            Crear nueva misión
-        </p>
-    </a>
-</div>
-<div class="my-missions-container">
-    <a href="/missions" class="missions-btn custom-btn">
-        <p class="btn-text">
-            Ver misiones
-        </p>
-    </a>
 </div>
 {{>footer}}
-
+<script src="profile.js"></script>

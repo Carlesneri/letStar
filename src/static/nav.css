@@ -24,6 +24,10 @@
   margin: 0;
   padding: 0;
 }
+.user-name{
+  display: flex;
+  align-items: flex-end;
+}
 .user-name a {
   font-size: 1.5em;
 }
@@ -58,15 +62,20 @@
     transition: all .33s ease-out .24s;
     z-index: -1;
 }
-.user-name i {
-    margin-left: 1em;
-    cursor: pointer;
-}
 .down-links {
-    top: var(--nav-height);
-    transition: all .33s ease-out;
-    z-index: -2;
+  top: var(--nav-height);
+  transition: all .33s ease-out;
+  z-index: -2;
 } 
+.user-name i {
+    margin: 0 0 .2em 1em;
+    cursor: pointer;
+    transition: all .33s;
+}
+.rotate{
+    transform: rotate(180deg);
+    transition: all .33s;
+}
 .nav-item .custom-icon{
-    font-size: 1.2em;
+    font-size: 1.5em;
 }

@@ -1,3 +1,15 @@
 .error-message {
     color: red
 }
+.form-container form{
+    margin: 1em;
+}
+.form-container div a{
+    width: 100%;
+    margin: 1em 0;
+    display: flex;
+    justify-content: center;
+}
+.form-title h3{
+    font-size: 1.2em;
+}

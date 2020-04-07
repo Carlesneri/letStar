@@ -19,7 +19,10 @@ const {renderIndex,
     editStar,
     addViewer,
     removeViewer,
-    getUser
+    getUser,
+    updateUser,
+    deleteUser,
+    renderProfile
 } = require('../controllers/index.controllers')
 
 const router = Router()
@@ -61,6 +64,12 @@ router.patch('/star', isUser, editStar)
 router.delete('/star', isUser, deleteStar)
 
 router.get('/user/:id', isUser, getUser)
+
+router.post('/user', isUser, updateUser)
+
+router.delete('/user', isUser, deleteUser)
+
+router.get('/profile', isUser, renderProfile)
 
 
 module.exports = router;
