@@ -3,12 +3,25 @@
 <div class="index-container">
     {{>jumbo}}
     <div>
-        <h2 class="p-index-text">
+        <h1 class="p-index-text">
             Consigue estrellas. Logra tus objetivos.
-        </h2>
+        </h1>
     </div>
-    <div class="index-star">
+    <div>
+        <p class="p-index-text-subt">
+            Inicia misiones y compártelas con otros usuarios.<br>
+            Añade estrellas a medida que vas avanzando hacia el objetivo.<br>
+            Puedes establecer una fecha límite y los misioneros que te acompañarán en el viaje.
+            Explica en la descripción de qué forma se pueden obtener las estrellas. 
+            Establece el premio que obtendrán los participantes si se logra el objetivo.
+        </p>
+    </div>
+    {{!-- <div class="index-star">
         <img src="/images/star.png" alt="star-home">
+    </div> --}}
+    <div class="mission-example">
+        <h3>Misión de ejemplo</h3>
+        {{>mission-example missionExample}}
     </div>
 </div>
 {{>footer}}

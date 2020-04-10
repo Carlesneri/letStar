@@ -3,7 +3,7 @@
     --light-color: hsl(191, 100%, 45%);
     --lighter-color: #00D0FF;
     --bg-color: #FFA04D;
-
+    --bg-mission-color: hsl(28, 100%, 63%);
 }
 *{
     margin: 0;
@@ -12,6 +12,10 @@
     font-family: 'Kaushan Script';
     color: var(--dark-color);
     font-size: 1rem;
+}
+div{
+    margin: 0;
+    padding: 0;
 }
 body{
     position: relative;
@@ -66,6 +70,10 @@ a:hover{
     background-color: transparent;
     outline: none;
     cursor: pointer;
+    font-weight: 600;
+}
+.empty-button:hover {
+    text-shadow: 1px 1px var(--light-color);
 }
 .form-container{
     max-width: 20em;
@@ -95,4 +103,10 @@ input::placeholder, textarea::placeholder{
 .custom-icon:hover{
     text-shadow: 1px 1px var(--light-color);
     cursor: pointer;
+}
+.error-msg{
+    color: red
+}
+.login-register-jumbo{
+    margin-top: 3em;
 }

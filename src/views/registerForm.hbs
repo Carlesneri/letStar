@@ -1,6 +1,7 @@
-{{>jumbo}}
+<div class="login-register-jumbo">
+    {{>jumbo}}
+</div>
 {{>messages}}
-<link rel="stylesheet" href="registerForm.css">
 <div class="form-container">
     <form action="/register" method="POST">
         <div class="new-mission-title form-item">
@@ -20,6 +21,9 @@
         </div>
         <div class="form-item">
             <input type="password" name="password" id="password" placeholder="Contraseña"  required="true" fill={{password}}>
+        </div>
+        <div class="form-item">
+            <input type="password" name="confirmPassword" id="confirmPassword" placeholder="Repetir contraseña"  required="true" fill={{confirmPassword}}>
         </div>
         <div class="error-message">
             {{message}}

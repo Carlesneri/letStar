@@ -10,7 +10,10 @@ Handlebars.registerHelper('times', function(total, active, block) {
 
 Handlebars.registerHelper('stars-remind', function(target, missioners, block) {
     var accum = 0;
-    missioners.forEach(missioner => accum += missioner.stars.length)
+    for(let i in missioners){
+        accum += missioners[i].stars.length
+    }
+    // missioners.map(missioner => accum += missioner.stars.length)
     return target - accum;  
 });
 

@@ -1,4 +1,4 @@
-function validate (name, email, password) {
+function validate (name, email, password, confirmPassword) {
     if(name){
         if(name.length < 6) return 'El usuario debe ser mayor a 6 caracteres'
     }
@@ -10,6 +10,10 @@ function validate (name, email, password) {
     if(password){
         if(password.length < 6) return 'La contraseña debe ser mayor a 6 caracteres'
     }
+    if(confirmPassword){
+        if(password !== confirmPassword) return 'La contraseña no coincide'
+    }
+
     return null
 }
 

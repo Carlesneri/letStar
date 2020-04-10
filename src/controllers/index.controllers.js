@@ -1,19 +1,23 @@
 const db = require('mongoose', {'useFindAndModify': false})
+// const missionExample = require('../mission-example')
 const { ObjectId } = db.Types
 const bcrypt = require('bcryptjs')
 const { MissionModel, UserModel, MissionerModel, StarModel } = require('../database/model')
 require('dotenv').config()
 require('../static/hbsHelpers')
 const DB_URI = process.env.DB_URI
-const validate = require('../validate/validate') 
+const validate = require('../validate/validate')
 const passport = require('passport')
-const { 
-    getMissions, 
-    getViewerMissions, 
-    getUser, removeViewer, 
-    deleteUser, 
-    updateUserName, 
-    updatePassword 
+const {
+    getMissionExample,
+    getMissions,
+    getViewerMissions,
+    updateMission,
+    getUser,
+    removeViewer,
+    deleteUser,
+    updateUserName,
+    updatePassword
 } = require('../services')
 
 db.connect(DB_URI, {
@@ -23,8 +27,10 @@ db.connect(DB_URI, {
 
 const indexCtrl = {}
 
-indexCtrl.renderIndex = (req, res) => {
-    res.render('index');
+
+indexCtrl.renderIndex = async (req, res) => {
+    const missionExample = await getMissionExample()
+    res.render('index', { missionExample });
 }
 
 indexCtrl.renderNewMissionForm = (req,res) => {
@@ -55,7 +61,7 @@ indexCtrl.addNewMission = async (req, res) => {
             })
             await newMission.save()
             req.flash('success_msg', 'Misión creada')
-            res.redirect('/missions')    
+            res.redirect('/missions')
         }
         catch(error){
             console.log(error);
@@ -65,19 +71,31 @@ indexCtrl.addNewMission = async (req, res) => {
 
 indexCtrl.renderMissions = async (req, res) => {
     if(req.user){
-        const missions = await getMissions(req.user._id)        
-        const viewerMissions = await getViewerMissions(req.user.email)  
-        if (missions.length > 0 || viewerMissions.length > 0){    
+        const missions = await getMissions(req.user._id)
+        const viewerMissions = await getViewerMissions(req.user.email)
+        if (missions.length > 0 || viewerMissions.length > 0){
             res.render('missions', { missions, viewerMissions })
-        }else res.render('no-missions')    
+        }else res.render('no-missions')
     }else{
         req.flash('error_msg', 'No se encuentra usuario')
         res.redirect('/login')
-    }  
+    }
 }
 
 indexCtrl.renderNoMissions = (req, res) => {
     res.render('no-missions')
+}
+
+indexCtrl.editMission = async (req, res) => {
+    try{
+        await updateMission(req.params.id, req.body)
+        req.flash("success_msg","Se han guardado los cambios")
+        res.status(200).redirect("/missions")
+    }catch(err){
+        console.log(err)
+        req.flash("error_msg", "Error al guardar")
+        res.status(400).redirect("/missions")
+    }
 }
 
 indexCtrl.deleteMission = async (req, res) => {
@@ -85,7 +103,7 @@ indexCtrl.deleteMission = async (req, res) => {
         const deletedMission = await MissionModel.findByIdAndDelete(req.params.id)
         // req.flash('success_msg', 'Misión eliminada')
         res.status(200).json(deletedMission)
-        
+
     } catch(err) {
         console.log(err);
         req.flash('error_msg', 'Error al eliminar misión')
@@ -101,7 +119,7 @@ indexCtrl.addStar = async (req, res) => {
     try{
         const missionFound = await MissionModel.findById(missionId)
         const missionerIndex =  missionFound.missioners.findIndex(el => el._id == missionerId)
-        missionFound.missioners[missionerIndex].stars.push(newStar)        
+        missionFound.missioners[missionerIndex].stars.push(newStar)
         const updatedMission = await missionFound.save()
         req.flash('success_msg', 'Estrella añadida')
         res.status(200).json(updatedMission)
@@ -124,14 +142,14 @@ indexCtrl.login = passport.authenticate('local', {
     failureRedirect: '/login',
     successRedirect: '/missions',
     failureFlash: true
-}) 
+})
 
 indexCtrl.register = async (req, res) => {
-    const message = validate(req.body.name, req.body.email, req.body.password)
+    const message = validate(req.body.name, req.body.email, req.body.password, req.body.confirmPassword)
     if(message) {
         return res.status(400).render('registerForm', {name: req.body.name, email: req.body.email, password: req.body.password, message})
     }
-    const user = await UserModel.findOne({email: req.body.email})   
+    const user = await UserModel.findOne({email: req.body.email})
     if(user) {
         const message = 'El usuario ya existe!'
         return res.status(400).render('registerForm', {name: req.body.name, email: req.body.email, password: req.body.password, message})
@@ -194,7 +212,7 @@ indexCtrl.deleteStar = async (req, res) => {
     }
 }
 
-indexCtrl.editStar = async (req, res) => {      
+indexCtrl.editStar = async (req, res) => {
     try{
         const { missionId, missionerId, starId, newComment } = req.body
         const missionFound = await MissionModel.findById(missionId)
@@ -226,7 +244,7 @@ indexCtrl.addViewer = async(req, res) => {
 }
 
 indexCtrl.removeViewer = async(req, res) => {
-    try{       
+    try{
         let { missionId, viewer } = req.body
         let message = 'Usuario eliminado'
         if(viewer === '_myEmail') {
@@ -261,7 +279,7 @@ indexCtrl.getUser = async(req, res) => {
 }
 
 indexCtrl.updateUser = async (req, res) => {
-    const { userName, oldPassword, newPassword } = req.body
+    const { userName, oldPassword, newPassword, confirmNewPassword } = req.body
     if(userName){
         let message = validate(userName, null, null)
         if(message){
@@ -282,8 +300,6 @@ indexCtrl.updateUser = async (req, res) => {
             }
         }
     }else if(oldPassword || newPassword){
-        console.log(oldPassword, newPassword);
-        
         let message = validate(null, null, oldPassword)
         if (message){
             return res.status(400).render('profile', { passwordMessage: message })
@@ -292,8 +308,12 @@ indexCtrl.updateUser = async (req, res) => {
         if(message){
             return res.status(400).render('profile', { passwordMessage: message })
         }
+        if(newPassword !== confirmNewPassword){
+            message = 'La contraseña no coincide'
+            return res.status(400).render('profile', { passwordMessage: message })
+        }
         const truePassword = bcrypt.compareSync(oldPassword, req.user.password)
-        console.log(truePassword);        
+        console.log(truePassword);
         if(truePassword){
             try{
                 const salt = await bcrypt.genSalt(10)
@@ -315,14 +335,20 @@ indexCtrl.updateUser = async (req, res) => {
 
 indexCtrl.deleteUser = async(req, res) => {
     try{
-        await deleteUser(req.body.id)
-        req.logout()
-        req.flash('success_msg', 'Cuenta eliminada')
-        res.status(200).end()
+        const truePassword = bcrypt.compareSync(req.body.password, req.user.password)
+        if(truePassword){
+            await deleteUser(req.body.id)
+            req.logout()
+            req.flash('success_msg', 'Cuenta eliminada')
+            res.status(200).json({message: null})
+        }else{
+            req.flash('error_msg', 'Contraseña incorrecta')
+            res.status(400).json({message: 'Contraseña incorrecta'})
+        }
     }catch(err){
         console.log(err)
         req.flash("error_msg", "Error al eliminar cuenta")
-        res.redirect("/missions")
+        res.status(400).end()
     }
 }
 

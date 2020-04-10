@@ -54,7 +54,9 @@ async function addStar(event){
         `<h2>Nueva estrella</h2>
         <div class="new-star-form">
         <input type="text" id="star-comment" class="comment" autofocus placeholder="Comentario"></input>
-        <a class="btn-text" onclick="newStar(event)" missionId=${mission} missionerId=${missioner} >Guardar</>
+        <div class="swal-buttons">
+            <a class="btn-text" onclick="newStar(event)" missionId=${mission} missionerId=${missioner} >Guardar</>
+            <a class="btn-text" onclick="closeSwal()">Cancelar</>
         </div>`,
         showConfirmButton: false
     })
@@ -92,23 +94,27 @@ async function newStar(event) {
     location.reload()
 }
 
-async function editStar(event) {
+function editStar(event) {
     const mission = event.target.getAttribute("mission")
     const missioner = event.target.getAttribute("missioner")
     const star = event.target.getAttribute("star")
     const date = event.target.getAttribute("date")
     const comment = event.target.getAttribute("comment")
-    await Swal.fire({
+    Swal.fire({
         html:
         `<h2>Editar estrella</h2>
-        <div><input type="text" id="comment" class="comment" value="${comment}"></input></div>
+        <div>
+            <input type="text" id="comment" class="comment" value="${comment}"></input>
+        </div>
         <div>${date}</div>
-        <div class="edit-star-form">
-            <a class="btn-text" onclick="removeStar(event)" missionId=${mission} missionerId=${missioner} starId=${star}>Eliminar Estrella</>
+        <div class="edit-star-form swal-buttons">
             <a class="btn-text" onclick="saveStar(event)" missionId=${mission} missionerId=${missioner} starId=${star}>Guardar Cambios</a>
+            <a class="btn-text" onclick="removeStar(event)" missionId=${mission} missionerId=${missioner} starId=${star}>Eliminar Estrella</>
+            <a class="btn-text" onclick="closeSwal()">Cancelar</>
         </div>`,
         showConfirmButton: false,
     })    
+    document.getElementById("comment").blur()
 }
 
 async function saveStar(event) {
@@ -183,8 +189,11 @@ function viewerMissionHandler(missionId, viewers){
         <p class="viewers-info">Sólo tú puedes editar la misión</p>
         <ul class="viewers" id="viewersUl"></ul>
         <input class="email-share-mission" type="email" id="missionViewer" placeholder="Email"></input> 
-        <div id="isEmail" class="is-email"></div>       
-        <a class="btn-text" onclick="shareMission('${missionId}')">Compartir</a>
+        <div id="isEmail" class="is-email"></div>  
+            <div class="swal-buttons">     
+                <a class="btn-text" onclick="shareMission('${missionId}')">Compartir</a>
+                <a class="btn-text" onclick="closeSwal()">Cerrar</a>
+            </div>
         </div>`,
         showConfirmButton: false,
     })    
@@ -341,4 +350,61 @@ async function removeMeAsAViewer(missionId){
     }
     Swal.close()
     location.reload()
+}
+
+function editMissionHandler(missionId){
+    const missionElement = document.getElementById(missionId)
+    const titleText = missionElement.getElementsByClassName("mission-name")[0].innerText
+    const missionersText = []
+    const missionerElements = missionElement.getElementsByClassName("missioner-name")
+    for(let i in missionerElements){
+        if(missionerElements[i].innerText) missionersText.push(missionerElements[i].innerText)
+    }
+    const descText = missionElement.getElementsByClassName("desc")[0].innerText    
+    const targetText = missionElement.getElementsByClassName("mission-title-data-item")[0].innerText.split(': ')[1]    
+    Swal.fire({
+        html: `
+            <form class="swal-edit-mission" action="/mission/${missionId}" method="POST">
+                <h2>Editar misión</h2>
+                <div>
+                    <label for="title">Título</label>
+                    <input type="text" id="title" name="title" value="${titleText}" autofocus>
+                </div>
+                <div class="new-mission-desc input-desc">
+                    <label for="desc">Descripción</label>
+                    <textarea id="desc" name="desc" value="descText">${descText}</textarea>  
+                </div>
+                <div class="missioners" id="missioners">
+                    <!-- Aquí los input de los misioneros -->
+                </div>
+                <div class="target-container">
+                    <label for="input-target">Objetivo:</label>
+                    <div class="target" id="target">
+                        <input type="number" name="target" min="1" max="1000" id="input-target" class="input-target" value=${targetText} plac>
+                    </div>
+                </div>
+                <div class="swal-date-container">
+                    <label for="input-date">Fecha límite</label>
+                    <div class="date" id="date">
+                        <input type="date" name="date" id="input-date" class="input-date">
+                    </div>
+                </div>
+                <div class="swal-buttons">
+                    <button class="empty-button" type="submit">Guardar</button>
+                    <a onclick="closeSwal()">Cancelar</a>
+                </div>
+            </form>
+        `,
+        showConfirmButton:false
+    })
+    
+    const missionersElement = document.getElementById("missioners")
+    missionersText.forEach((missioner, index) => {
+        missionersElement.innerHTML += `
+            <div>
+                <label for="missioner-${index}">Misionero ${index + 1}</label>
+                <input type="text" name="missioner" id="missioner-${index}" value=${missioner}>
+            </div>
+        `
+    })
 }

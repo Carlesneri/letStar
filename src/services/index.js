@@ -3,6 +3,12 @@ const db = require('mongoose')
 const { ObjectId } = db.Types
 
 
+async function getMissionExample(){
+    const missions = await MissionModel.find({ user: "5e8cb7822cdb72500859ac97"})
+    let random = Math.floor(Math.random() * missions.length)
+    return missions[random]
+}
+
 async function getMissions(id) {
     return await MissionModel.find({ user:id })
 }
@@ -46,10 +52,31 @@ async function updatePassword(id, newPassword){
 }
 
 async function deleteUser(id){
-    return await UserModel.findByIdAndDelete(ObjectId(id))
+    const user = await UserModel.findByIdAndDelete(ObjectId(id))
+    return user
 }
 
-module.exports = { getMissions, 
+async function updateMission(id, body){
+    const mission = await MissionModel.findById(ObjectId(id))    
+    mission.title = body.title
+    mission.description = body.desc
+    mission.target = body.target
+    if(body.date !== '') mission.date = body.date
+    mission.missioners.forEach((el, index) => {
+        el.name = body.missioner[index]
+    })
+
+    return await MissionModel.updateOne(
+        { _id: ObjectId(id) }, 
+        { $set: mission },
+        { new: true })
+}
+
+
+module.exports = { 
+    getMissionExample,
+    getMissions, 
+    updateMission,
     getTotalStars, 
     getViewerMissions, 
     getUser, 

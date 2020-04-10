@@ -1,4 +1,4 @@
-<div class="mission" id="{{_id}}">
+<div class="mission">
     <div class="mission-title">
         <div class="mission-name">
             {{title}}
@@ -20,7 +20,7 @@
                     <i class="fas fa-pen custom-icon" 
                     title="Editar misión"
                     mission="{{_id}}" 
-                    onclick="editMissionHandler('{{_id}}')"></i>
+                    ></i>
                 </button>
             </div>
             <div class="viewers">
@@ -28,16 +28,16 @@
                     <i class="fas fa-users custom-icon" 
                     title="Compartir con otro usuario"
                     mission="{{_id}}" 
-                    onclick="viewerMissionHandler('{{_id}}', '{{viewers}}')"></i>
+                    ></i>
                 </button>
             </div>
             <div class="trash">
-                <button class="empty-button" >
-                    <i class="fas fa-trash custom-icon" 
-                    title="Eliminar misión"
-                    mission="{{_id}}" 
-                    onclick="removeMissionHandler(event)"></i>
-                </button>
+                    <button class="empty-button" >
+                        <i class="fas fa-trash custom-icon" 
+                        title="Eliminar misión"
+                        mission="{{_id}}" 
+                        ></i>
+                    </button>
             </div>
 
         </div>
@@ -61,7 +61,7 @@
                             star="{{_id}}"
                             comment="{{star.comment}}" 
                             date="{{#stringDate star.updatedAt}}{{/stringDate}}"
-                            onclick="editStar(event)">
+                            >
                         {{/each}}
                     </div>
                     <div class="add-remove-star">
@@ -70,7 +70,7 @@
                                 <a class="btn-text" 
                                 mission={{../../_id}} 
                                 missioner={{../_id}} 
-                                onclick="addStar(event)">
+                                >
                                     Añadir estrella
                                 </a>
                             </div>
@@ -93,4 +93,4 @@
         </div>
     </div>
 </div>
-<script src="./mission.js"></script>
+{{!-- <script src="./mission.js"></script> --}}

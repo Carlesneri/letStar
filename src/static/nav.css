@@ -11,13 +11,16 @@
 .nav-links .nav-item{
     margin: 0 .5em;
 }
+.user-links{
+  border-radius: 5px;
+  background-color: var(--bg-color);
+}
 .user-links .nav-item {
   margin: 0 1em;
   padding: .22em;
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: var(--bg-color);
 }
 .nav-item img {
   width: 1em;

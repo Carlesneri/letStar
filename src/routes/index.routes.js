@@ -6,6 +6,7 @@ const {renderIndex,
     addNewMission, 
     renderMissions,
     renderNoMissions,
+    editMission,
     deleteMission, 
     addStar,
     loginForm, 
@@ -36,6 +37,8 @@ router.post('/new-mission', isUser, addNewMission)
 router.get('/missions', isUser, renderMissions)
 
 router.get('/no-missions', renderNoMissions)
+
+router.post('/mission/:id', isUser, editMission)
 
 router.delete('/mission/:id', isUser, deleteMission)
 
@@ -70,6 +73,7 @@ router.post('/user', isUser, updateUser)
 router.delete('/user', isUser, deleteUser)
 
 router.get('/profile', isUser, renderProfile)
+
 
 
 module.exports = router;

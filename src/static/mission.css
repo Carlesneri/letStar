@@ -4,6 +4,7 @@
     border-radius: 10px;
     padding: 1em;
     margin: 2em;
+    background-color: var(--bg-mission-color);
 }
 .missioner {
     margin: 1em;
@@ -178,6 +179,9 @@
 .title-buttons{
     display: flex;
 }
+.title-buttons div{
+    margin: 0 .5em;
+}
 .viewers, .trash{
     margin: 0 0.33em;
 }
@@ -217,4 +221,41 @@
 }
 .remove-viewer a{
     margin: 0 1em;
+}
+.swal-buttons{
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    margin: 1em;
+}
+.swal-edit-mission{
+    display: flex;
+    flex-direction: column;
+    width: 90%;
+    align-items: flex-start;
+    margin: 0 auto;
+    overflow: hidden;
+}
+.swal-edit-mission h2{
+    width: 100%;
+    margin: 1em;
+}
+.swal-edit-mission div{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+}
+.swal-edit-mission label{
+    min-width: 5em;
+    width: 30%;
+}
+.swal-date-container input{
+    width: 100%;
+}
+.swal-edit-mission .missioners{
+    margin: 0;
+    padding: 0;
+    flex-direction: column;
 }

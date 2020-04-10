@@ -20,4 +20,15 @@
     width: 5em;
     margin-top: 2em;
 }
-
+.p-index-text-subt{
+    text-align: center;
+    font-size: 1.3em;
+    padding: 0 10%;
+}
+.mission-example{
+    margin-top: 2em;
+}
+.mission-example h3{
+    font-size: 1.2em;
+    text-align: center;
+}
