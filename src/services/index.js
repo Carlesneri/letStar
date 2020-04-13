@@ -1,4 +1,4 @@
-const { MissionModel, UserModel } = require('../database/model')
+const { MissionModel, UserModel, ViewerModel } = require('../database/model')
 const db = require('mongoose')
 const { ObjectId } = db.Types
 
@@ -15,6 +15,19 @@ async function getMissions(id) {
 
 async function getViewerMissions(email) {
     return await MissionModel.find({ viewers: email })
+}
+
+async function getSharedMissions(email) {
+    const missions = await MissionModel.find({ "observers.email": email })
+    const editorMissions = []
+    const observerMissions = []
+    missions.forEach( mission => {
+        mission.observers.forEach( observer => {
+            if(observer.email === email && observer.rol === "write") editorMissions.push(mission)
+            if(observer.email === email && observer.rol === "read") observerMissions.push(mission)
+        })
+    })
+    return { editorMissions, observerMissions }
 }
 
 async function getModelDocs(model, key, id){
@@ -35,9 +48,28 @@ async function getUser(id) {
     
 }
 
-async function removeViewer(id, viewer){
-    return await MissionModel.updateOne({_id: id}, {$pull: {viewers: viewer}}, {new: true})
+async function addViewer(id, viewer, role){
+    const newViewer = new ViewerModel({ email: viewer, rol: role })
+    return await MissionModel.updateOne(
+        {_id: id},
+        {$addToSet: {observers: newViewer}}, 
+        {new: true}
+    )
 }
+
+async function removeMeAsAViewer(id, email){
+    const mission =  await MissionModel.findById(ObjectId(id))
+    const observers = mission.observers.filter(observer => observer.email !== email)
+    mission.observers = observers
+    return await mission.save()
+}
+
+async function removeViewer(id, email){
+    const mission =  await MissionModel.findById(ObjectId(id))
+    mission.observers = mission.observers.filter(observer => observer.email !== email)
+    return await mission.save()
+}
+    
 
 async function updateUserName(id, newUserName){
     return await UserModel.updateOne({ _id: id}, { $set: { name: newUserName }})
@@ -79,7 +111,10 @@ module.exports = {
     updateMission,
     getTotalStars, 
     getViewerMissions, 
+    getSharedMissions,
     getUser, 
+    addViewer,
+    removeMeAsAViewer,
     removeViewer, 
     updateUserName,
     updatePassword,

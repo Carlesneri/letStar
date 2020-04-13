@@ -1,6 +1,4 @@
 const db = require('mongoose', {'useFindAndModify': false})
-// const missionExample = require('../mission-example')
-const { ObjectId } = db.Types
 const bcrypt = require('bcryptjs')
 const { MissionModel, UserModel, MissionerModel, StarModel } = require('../database/model')
 require('dotenv').config()
@@ -11,9 +9,11 @@ const passport = require('passport')
 const {
     getMissionExample,
     getMissions,
-    getViewerMissions,
+    getSharedMissions,
     updateMission,
     getUser,
+    addViewer,
+    removeMeAsAViewer,
     removeViewer,
     deleteUser,
     updateUserName,
@@ -72,9 +72,9 @@ indexCtrl.addNewMission = async (req, res) => {
 indexCtrl.renderMissions = async (req, res) => {
     if(req.user){
         const missions = await getMissions(req.user._id)
-        const viewerMissions = await getViewerMissions(req.user.email)
-        if (missions.length > 0 || viewerMissions.length > 0){
-            res.render('missions', { missions, viewerMissions })
+        const {editorMissions, observerMissions} = await getSharedMissions(req.user.email)       
+        if (missions.length > 0 || viewerMissions.length > 0 || observerMissions.length > 0){
+            res.render('missions', { missions, editorMissions, observerMissions })
         }else res.render('no-missions')
     }else{
         req.flash('error_msg', 'No se encuentra usuario')
@@ -231,9 +231,8 @@ indexCtrl.editStar = async (req, res) => {
 
 indexCtrl.addViewer = async(req, res) => {
     try{
-        const { missionId, viewer } = req.body
-        const mission = await MissionModel.updateOne({_id: missionId},
-            {$addToSet: {viewers: viewer}}, {new: true})
+        const { missionId, viewer, role } = req.body
+        const mission = await addViewer(missionId, viewer, role)
         req.flash('success_msg', 'Misión compartida')
         res.status(200).json(mission)
     } catch(err){
@@ -245,15 +244,20 @@ indexCtrl.addViewer = async(req, res) => {
 
 indexCtrl.removeViewer = async(req, res) => {
     try{
-        let { missionId, viewer } = req.body
+        let { missionId, email } = req.body
         let message = 'Usuario eliminado'
-        if(viewer === '_myEmail') {
-            viewer = req.user.email
+        if(email === '_myEmail') {
+            console.log(email);
+            
             message = 'Misión eliminada de mi lista'
+            const mission = await removeMeAsAViewer(missionId, req.user.email)
+            req.flash('success_msg', message)
+            res.status(200).json(mission)
+        }else{
+            const mission = await removeViewer(missionId, email)
+            req.flash('success_msg', message)
+            res.status(200).json(mission)
         }
-        const mission = await removeViewer(missionId, viewer)
-        req.flash('success_msg', message)
-        res.status(200).json(mission)
     } catch(err){
         console.log(err)
         req.flash('error_msg', 'No se ha podido eliminar usuario')

@@ -182,13 +182,22 @@ async function getComment(starId) {
     return comment   
 }
 
-function viewerMissionHandler(missionId, viewers){
+function viewerMissionHandler(missionId, observersEmail, observersRol){
     Swal.fire({
         html:
         `<h2>Compartir misión</h2>
-        <p class="viewers-info">Sólo tú puedes editar la misión</p>
         <ul class="viewers" id="viewersUl"></ul>
-        <input class="email-share-mission" type="email" id="missionViewer" placeholder="Email"></input> 
+        <div>
+            <label for="missionViewer">Email</label>
+            <input class="email-share-mission" type="email" id="missionViewer" placeholder="Email"></input> 
+        </div>
+        <div class="swal-share-mission-select">
+            <label for="missionViewerRole">Rol</label>
+            <select id="missionViewerRole">
+                <option value="read" selected>Observador</option>
+                <option value="write">Editor</option>
+            </select>
+        </div>
         <div id="isEmail" class="is-email"></div>  
             <div class="swal-buttons">     
                 <a class="btn-text" onclick="shareMission('${missionId}')">Compartir</a>
@@ -197,20 +206,24 @@ function viewerMissionHandler(missionId, viewers){
         </div>`,
         showConfirmButton: false,
     })    
-    const viewersArr = viewers.split(',')   
+    
+    const observersEmailArr = observersEmail.split(',')   
+    const observersRoleArr = observersRol.split(',')   
     const viewersUl = document.getElementById("viewersUl")
-    if (viewers && viewersArr.length > 0){
+    if (observersEmail !== '' && observersEmailArr.length > 0){
         viewersUl.innerHTML = `<div>Compartido con: </div>`
-        viewersArr.forEach(viewer => {
+        observersEmailArr.forEach((email, index) => {
+        const role = observersRoleArr[index] === "write" ? "Editor" : "Observador"
             viewersUl.innerHTML += 
             `
                 <li>
-                    <div>
-                        ${viewer}
+                    <div id="sharedUsers">
+                        <span class="shared-email">${email} </span>
+                        <span> (${role})</span>
                     </div>
-                    <i class="fas fa-trash custom-icon" 
-                    title="Eliminar"
-                    onclick="removeViewer('${missionId}', '${viewer}')"></i>
+                    <i class="fas fa-user-times custom-icon" 
+                    title="Eliminar" 
+                    onclick="removeViewer('${missionId}', '${email}')"></i>
                 </li>
             `
         })
@@ -219,7 +232,9 @@ function viewerMissionHandler(missionId, viewers){
     
 async function shareMission(missionId){
     const missionViewerInput = document.getElementById("missionViewer")
+    const missionViewerRoleInput = document.getElementById("missionViewerRole")
     const viewer = missionViewerInput.value.trim()
+    const role = missionViewerRoleInput.value
     const isEmail = validateEmail(viewer)
     const isEmailNode = document.getElementById("isEmail")
     if(!isEmail){
@@ -227,37 +242,51 @@ async function shareMission(missionId){
         missionViewerInput.focus()
     }    
     else{
-        isEmailNode.innerText = ""
-        Swal.showLoading()
-        try{
-            const data = {missionId, viewer}
-            await fetch("/viewers", {
-                method: "PATCH",
-                body: JSON.stringify(data),
-                headers: {
-                    'Content-Type': 'application/json'
+        let isShared = false
+        const $sharedEmails = document.querySelectorAll(".shared-email") 
+        if ($sharedEmails){
+            const sharedEmails = []
+            $sharedEmails.forEach(el => sharedEmails.push(el.innerText.trim()))
+            sharedEmails.forEach(sharedEmail => {
+                if (sharedEmail === viewer){                
+                    isShared = true
+                    isEmailNode.innerText = `Ya has compartido la misión con ${viewer}`
+                    missionViewerInput.focus()
                 }
             })
-            Swal.close()
-            location.reload()        
-        }catch(err){
-            console.log('Error al compartir misión. Error: ', err);
-            Swal.fire({
-                html: "Error compartir misión",
-                showConfirmButton: false,
-                timer: 1300,
-            })
         }
-        Swal.close()
-        location.reload()
-    }    
+        if(isShared === false){
+            isEmailNode.innerText = ""
+            Swal.showLoading()
+            try{
+                const data = {missionId, viewer, role}
+                await fetch("/viewers", {
+                    method: "PATCH",
+                    body: JSON.stringify(data),
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+                Swal.close()
+                location.reload()        
+            }catch(err){
+                console.log('Error al compartir misión. Error: ', err);
+                Swal.fire({
+                    html: "Error compartir misión",
+                    showConfirmButton: false,
+                    timer: 1300,
+                })
+            }
+            Swal.close()
+            location.reload()
+        }
+    }
 }
 
-async function removeViewer(id, viewer){
-    const missionId = id
+async function removeViewer(missionId, email){
     Swal.showLoading()
     try{
-        const data = { missionId, viewer }
+        const data = { missionId, email }
         await fetch("/viewers", {
             method: "DELETE",
             body: JSON.stringify(data),
@@ -323,14 +352,9 @@ async function removeMeAsAViewerHandler(missionId){
 }
 
 async function removeMeAsAViewer(missionId){
-    Swal.fire({
-        html: "Eliminado misión de tu lista",
-        showConfirmButton: false
-    })
     Swal.showLoading()
     try{
-        const viewer = '_myEmail'
-        const data = { missionId, viewer }
+        const data = { missionId, email: '_myEmail' }
         await fetch("/viewers", {
             method: "DELETE",
             body: JSON.stringify(data),
@@ -408,3 +432,8 @@ function editMissionHandler(missionId){
         `
     })
 }
+
+// function showStarInfo(comment, date){
+//     console.log(comment, date);
+    
+// }

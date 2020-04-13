@@ -13,7 +13,6 @@ Handlebars.registerHelper('stars-remind', function(target, missioners, block) {
     for(let i in missioners){
         accum += missioners[i].stars.length
     }
-    // missioners.map(missioner => accum += missioner.stars.length)
     return target - accum;  
 });
 
@@ -60,3 +59,17 @@ Handlebars.registerHelper('removeStar', function(stars, block) {
     if(stars > 0) return block.fn()
     else return null
 });
+
+Handlebars.registerHelper('stringifyObservers', function(observers, field, block){ 
+    return observers.map(observer => observer[field])
+})
+// Handlebars.registerHelper('isEditor', function(email, observers, block) {
+//     console.log(email);
+//     console.log(observers);
+//     const {rol} = observers.find(observer => {
+//         if(observer.email === email) return observer
+//     })
+//     let isEditor = rol === 'write' ? true : false
+//     return isEditor 
+// });
+

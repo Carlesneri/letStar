@@ -1,6 +1,7 @@
 <div class="mission" id="{{_id}}">
     <div class="mission-title">
         <div class="mission-name">
+            <i class="fas fa-share-square custom-icon off-icon" title="misión compartida"></i>
             {{title}}
         </div>
         <div class="mission-title-data">
@@ -37,20 +38,28 @@
             </div>
             <div class="trash">
                 <button class="empty-button" >
+                    <i class="fas fa-user-times custom-icon" 
+                    title="Eliminarme como observador"
+                    mission="{{_id}}" 
+                    onclick="removeMeAsAViewerHandler('{{_id}}')"></i>
+                </button>
+            </div>
+
+            {{!-- <div class="trash">
+                <button class="empty-button" >
                     <i class="fas fa-trash custom-icon" 
                     title="Eliminar misión"
                     mission="{{_id}}" 
                     onclick="removeMissionHandler(event)"></i>
                 </button>
-            </div>
-
+            </div> --}}
         </div>
     </div>
     <div class="mission-body">
         <div class="missioners">
-            {{#each missioners as |missioner| }}
+            {{#each missioners as |missioner|}}
             <div class="missioner">
-                <div class="missioner-name"> 
+                <div class="missioner-name">
                     {{missioner.name}}
                 </div>
                 <div class="missioner-stars">

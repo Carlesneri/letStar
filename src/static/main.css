@@ -85,7 +85,7 @@ a:hover{
     justify-content: center;
     align-items: center;    
 }
-input, textarea{
+input, textarea, select{
     width: 100%;
     color: var(--light-color);
     outline: none;
@@ -109,4 +109,8 @@ input::placeholder, textarea::placeholder{
 }
 .login-register-jumbo{
     margin-top: 3em;
+}
+.off-icon{
+    cursor: auto;
+    opacity: .7;
 }

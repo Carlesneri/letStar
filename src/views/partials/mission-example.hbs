@@ -61,6 +61,7 @@
                             star="{{_id}}"
                             comment="{{star.comment}}" 
                             date="{{#stringDate star.updatedAt}}{{/stringDate}}"
+                            onclick="showStarInfo('{{star.comment}}', '{{#stringDate star.updatedAt}}{{/stringDate}}')"
                             >
                         {{/each}}
                     </div>
@@ -93,4 +94,4 @@
         </div>
     </div>
 </div>
-{{!-- <script src="./mission.js"></script> --}}
+<script src="./mission.js"></script>

@@ -4,27 +4,7 @@
     </div>
     <div class="nav-links">
     {{#if user}}
-        <div class="user-nav">
-            <div class="nav-item user-name">
-                <a href="/missions">
-                    {{user.name}}
-                </a>
-                <i class="fas fa-caret-down custom-icon" id="downLinksArrow"></i>
-            </div>
-            <div class="user-links" id="user-links">
-                <div class="nav-item new-mission">
-                    <a href="/new-mission">
-                        nueva misión
-                    </a>
-                </div>
-                <div class="nav-item logout">
-                    <a href="/logout">
-                        cerrar sesión
-                    </a>
-                </div>
-            </div>
-        </div>
-        <script src="nav.js"></script>
+        {{>nav-user}}
     {{else}}
         <div class="nav-item login">
             <a href="/login">

@@ -259,3 +259,6 @@
     padding: 0;
     flex-direction: column;
 }
+.swal-share-mission-select select{
+    width: 10em;
+}

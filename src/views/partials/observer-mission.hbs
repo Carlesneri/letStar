@@ -1,6 +1,7 @@
-<div class="mission" id="{{_id}}">
+<div class="mission">
     <div class="mission-title">
         <div class="mission-name">
+            <i class="fas fa-share-square custom-icon off-icon" title="misión compartida"></i>
             {{title}}
         </div>
         <div class="mission-title-data">
@@ -15,42 +16,27 @@
             </div>
         </div>
         <div class="title-buttons">
-            <div class="edit">
-                <button class="empty-button" >
-                    <i class="fas fa-pen custom-icon" 
-                    title="Editar misión"
-                    mission="{{_id}}" 
-                    onclick="editMissionHandler('{{_id}}')"></i>
-                </button>
-            </div>
-            <div class="viewers">
-                <button class="empty-button" >
-                    <i class="fas fa-users custom-icon" 
-                    title="Compartir con otro usuario"
-                    mission="{{_id}}" 
-                    onclick="viewerMissionHandler('{{_id}}', 
-                    '{{#stringifyObservers observers "email"}}{{/stringifyObservers}}',
-                    '{{#stringifyObservers observers "rol"}}{{/stringifyObservers}}',
-                    )">
-                    </i>
-                </button>
+            <div class="lock">
+                    <i class="fas fa-lock custom-icon" 
+                    title="No puedes editar"
+                    onclick="getOwner('{{user}}')"
+                    ></i>
             </div>
             <div class="trash">
                 <button class="empty-button" >
-                    <i class="fas fa-trash custom-icon" 
-                    title="Eliminar misión"
+                    <i class="fas fa-user-times custom-icon" 
+                    title="Eliminarme como observador"
                     mission="{{_id}}" 
-                    onclick="removeMissionHandler(event)"></i>
+                    onclick="removeMeAsAViewerHandler('{{_id}}')"></i>
                 </button>
             </div>
-
         </div>
     </div>
     <div class="mission-body">
         <div class="missioners">
-            {{#each missioners as |missioner| }}
+            {{#each missioners as |missioner|}}
             <div class="missioner">
-                <div class="missioner-name"> 
+                <div class="missioner-name">
                     {{missioner.name}}
                 </div>
                 <div class="missioner-stars">
@@ -65,20 +51,9 @@
                             star="{{_id}}"
                             comment="{{star.comment}}" 
                             date="{{#stringDate star.updatedAt}}{{/stringDate}}"
-                            onclick="editStar(event)">
+                            onclick="showStarInfo('{{star.comment}}', '{{#stringDate star.updatedAt}}{{/stringDate}}')"
+                            >
                         {{/each}}
-                    </div>
-                    <div class="add-remove-star">
-                        {{#addStar ../target  ../missioners  missioner.stars.length}}
-                            <div class="add-star">
-                                <a class="btn-text" 
-                                mission={{../../_id}} 
-                                missioner={{../_id}} 
-                                onclick="addStar(event)">
-                                    Añadir estrella
-                                </a>
-                            </div>
-                        {{/addStar}}
                     </div>
                 </div>
             </div>

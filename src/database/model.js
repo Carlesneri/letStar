@@ -34,6 +34,20 @@ const missionerSchema = new Schema({
     }
 })
 
+const viewerSchema = new Schema({
+    email: {
+        type: String,
+        required: true
+    },
+    rol: {
+        type: String,
+        required: true
+    }
+},
+{
+    timestamps: true
+})
+
 const missionSchema = new Schema({
     user: {
         type: String,
@@ -57,8 +71,8 @@ const missionSchema = new Schema({
     date: {
         type: Date
     },
-    viewers: {
-        type: [String]
+    observers: {
+        type: [viewerSchema]
     }
 }, 
 {
@@ -88,5 +102,6 @@ const MissionerModel = mongoose.model('Missioner', missionerSchema)
 const UserModel = mongoose.model('User', userSchema)
 const DateModel = mongoose.model('Date', dateSchema)
 const StarModel = mongoose.model('Star', starSchema)
+const ViewerModel = mongoose.model('Viewer', viewerSchema)
 
-module.exports = { MissionModel, MissionerModel, UserModel, DateModel, StarModel }
+module.exports = { MissionModel, MissionerModel, UserModel, DateModel, StarModel, ViewerModel }

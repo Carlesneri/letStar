@@ -4,8 +4,11 @@
     {{#each missions as |missionItem|}}
         {{> mission missionItem}}
     {{/each}}
-    {{#each viewerMissions as |missionItem|}}
-        {{> viewer-mission missionItem}}
+    {{#each editorMissions as |missionItem|}}
+        {{> editor-mission missionItem}}
+    {{/each}}
+    {{#each observerMissions as |missionItem|}}
+        {{> observer-mission missionItem}}
     {{/each}}
     <div class="missions-new-mission">
         <a href="/new-mission">Crear misión nueva</a>
