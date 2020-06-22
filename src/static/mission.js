@@ -433,7 +433,3 @@ function editMissionHandler(missionId){
     })
 }
 
-// function showStarInfo(comment, date){
-//     console.log(comment, date);
-    
-// }
