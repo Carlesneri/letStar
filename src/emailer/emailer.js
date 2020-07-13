@@ -1,19 +1,26 @@
 const puppeteer = require('puppeteer')
-// const fs = require('fs')
-// const path = require('path')
+const fs = require('fs')
+const path = require('path')
 
 const sendEmail = require('./sendEmail')
 
-const urlTemplate = "https://www.tripadvisor.es/Search?searchSessionId=918080052CEB038FB3E1D272A826B34C1593775472935ssid&searchNearby=&geo=1&sid=D82CC312BAAE201FDA0D300696B446E91593775483563&blockRedirect=true&ssrc=e&rf=5"
+const ejsFile = fs.readFileSync(path.join(__dirname, '/nodemailer-template-styled.ejs'), {
+    encoding: 'utf8',
+    flag: 'r'
+})
 
-const MAX_PAGES = 33
+const urlTemplate = "https://www.tripadvisor.es/Search?searchSessionId=918080052CEB038FB3E1D272A826B34C1593775472935ssid&searchNearby=&sid=D82CC312BAAE201FDA0D300696B446E91593775483563&ssrc=e"
 
-const WAIT_FOR = 4000
+const MAX_PAGES = 34
 
-const queries = ['el', 'the', 'in']
+const WAIT_FOR = 1000
+
+const queries = ['el', 'the', 'in', 'of', 'my']
+
+const usedEmails = []
 
 async function emailer(){
-    for(let numPage = 8; numPage < 9; numPage++){
+    for(let numPage = 18; numPage < MAX_PAGES; numPage++){
         console.log('Page: ', numPage)        
         const browser = await puppeteer.launch({ 
             headless: true,
@@ -29,31 +36,60 @@ async function emailer(){
             const urlPage = `${urlTemplate}&q=${queries[queries.length - 1]}&o=${pageResult}`
             await page.goto(urlPage, { waitUntil: 'networkidle0'})
 
+            await page.waitFor(WAIT_FOR)   
+
             const results = await page.$$('.result-card')
             console.log('Results: ', results.length)
+
+            let pages
             
             for(let n = 0; n < results.length; n++){
                 try{     
-                    const numResult = Number(n + 1)       
+                    const numResult = Number(n + 1)   
                     console.log(`Result ${numResult} of ${results.length}`)
-                    await page.click(`.result-card:nth-of-type(${numResult})`)
-                    await page.waitFor(WAIT_FOR)   
-                    const pages = await browser.pages()
-                    page = pages[2]
-                    await page.waitFor(WAIT_FOR)   
-                    const email = await getEmail(page)
-                    if(email !== ''){
-                        await sendEmail(email)
+
+                    //--> VERIFICAMOS RESULT VÁLIDO
+                    if((numResult === 1 || (numResult - 1) % 6 !== 0) && numResult !== 4){
+                        // console.log(await page.title())
+                        // await page.waitFor(3 * WAIT_FOR)   
+                        await page.click(`.result-card:nth-of-type(${numResult})`)
+                        await page.waitFor(2100)   
+                        pages = await browser.pages()
+                        page = pages[2]
+                        // console.log(await page.title())
+                        await page.waitFor(WAIT_FOR)   
+                        const emailReceiver = await getEmail(page)
+                        // console.log(emailReceiver)
+                        
+                        if(emailReceiver !== ''){
+                            const emailReceiverIndex = usedEmails.findIndex(el => el === emailReceiver)
+                            // console.log(emailReceiverIndex)
+
+                            if(emailReceiverIndex < 0){
+                                await sendEmail(ejsFile, emailReceiver)
+                                usedEmails.push(emailReceiver)
+                                
+                            }else{
+                                console.log('Used email')
+                            }
+                            
+                        }else{
+                            console.log('No mail found')
+                        }
+        
+                        await page.close()   
+                        pages = await browser.pages()
+                        page = pages[1]
+                        await page.waitFor(WAIT_FOR)   
                     }else{
-                        console.log('No mail found')
+                        console.log('No valid selector')
                     }
-    
-                    await page.close()   
-                    page = pages[1]
-                    await page.waitFor(WAIT_FOR)   
                     
                 }catch(err){
-                    console.error(`Error in ${urlPage}`)                
+                    console.error(err)     
+                    pages = await browser.pages()
+                    page = pages[1]          
+                    await page.waitFor(WAIT_FOR)   
                 }
             }
                     
@@ -65,65 +101,26 @@ async function emailer(){
 }
 
 async function getEmail(page){
+    let email = ''
     try{
         const hrefs = await page.$$eval('a', arr => arr.map(el => el.getAttribute('href')))
         
-        let email = ''
         if(hrefs.length > 0){
             for(let i = 0; i < hrefs.length; i++){
-                if (hrefs[i] && hrefs[i].includes('mailto:')) email = hrefs[i].replace('mailto:', '').replace('?subject=?', '')
-            }
-            
+
+                if(hrefs[i] && hrefs[i].includes('mailto:')){
+                    email = hrefs[i]
+                    email = email.replace('mailto:', '')
+                    if(email.includes('?subject=?')) email = email.replace('?subject=?', '')
+
+                }
+            }            
         }       
-        return email
         
     }catch(err){
-        console.error(`Error in ${url}: ${err}`)        
+        console.error(err)        
     }
+    return email
 }
-
-
-// function writeInFile(filename, data){
-//     const newData = data + '\n'
-//     fs.appendFile(path.join(__dirname, `${filename}.txt`), newData, err => {
-//         if (err) return console.error(err)
-//     })
-// }
-
-// async function getRestUrls(page, browser){
-//     try{
-//         const urls = []
-//         const results = await page.$$('.result-card')
-//         console.log('Results: ', results.length)
-        
-//         for(let n = 0; n < results.length; n++){
-//             try{     
-//                 const numResult = Number(n + 1)       
-//                 console.log(`Result ${numResult} of ${results.length}`)
-//                 await page.click(`.result-card:nth-of-type(${numResult})`)
-//                 await page.waitFor(WAIT_FOR)   
-//                 const pages = await browser.pages()
-//                 page = await pages[2]
-//                 await page.waitFor(WAIT_FOR)   
-//                 const email = await getEmail(page)
-//                 if(email){
-//                     writeInFile(queries[queries.length - 1], email)
-//                 }
-
-//                 await page.close()   
-//                 page = await pages[1]
-//                 await page.waitFor(WAIT_FOR)   
-                
-//             }catch(err){
-//                 console.error(err.Error)                
-//             }
-//         }
-//         return urls
-
-//     }catch(err){
-//         console.error(err)        
-//     }
-// }
-
 
 emailer()
