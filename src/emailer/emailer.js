@@ -13,14 +13,14 @@ const urlTemplate = "https://www.tripadvisor.es/Search?searchSessionId=918080052
 
 const MAX_PAGES = 34
 
-const WAIT_FOR = 1000
+const WAIT_FOR = 0 // 1000
 
-const queries = ['el', 'the', 'in', 'of', 'my']
+const queries = ['el', 'the', 'in', 'of', 'my', 'is', 'at']
 
 const usedEmails = []
 
 async function emailer(){
-    for(let numPage = 18; numPage < MAX_PAGES; numPage++){
+    for(let numPage = 2; numPage < MAX_PAGES; numPage++){
         console.log('Page: ', numPage)        
         const browser = await puppeteer.launch({ 
             headless: true,
@@ -34,9 +34,10 @@ async function emailer(){
         try{
             const pageResult = numPage * 30
             const urlPage = `${urlTemplate}&q=${queries[queries.length - 1]}&o=${pageResult}`
-            await page.goto(urlPage, { waitUntil: 'networkidle0'})
+            await page.goto(urlPage, { waitUntil: 'load', timeout: 100000})
 
-            await page.waitFor(WAIT_FOR)   
+            // await page.waitFor(WAIT_FOR)   
+            await page.waitForSelector('.result-card')   
 
             const results = await page.$$('.result-card')
             console.log('Results: ', results.length)
@@ -51,13 +52,13 @@ async function emailer(){
                     //--> VERIFICAMOS RESULT VÁLIDO
                     if((numResult === 1 || (numResult - 1) % 6 !== 0) && numResult !== 4){
                         // console.log(await page.title())
-                        // await page.waitFor(3 * WAIT_FOR)   
+                        await page.waitForSelector(`.result-card:nth-of-type(${numResult})`)   
                         await page.click(`.result-card:nth-of-type(${numResult})`)
                         await page.waitFor(2100)   
                         pages = await browser.pages()
                         page = pages[2]
                         // console.log(await page.title())
-                        await page.waitFor(WAIT_FOR)   
+                        // await page.waitFor(WAIT_FOR)   
                         const emailReceiver = await getEmail(page)
                         // console.log(emailReceiver)
                         
@@ -80,7 +81,7 @@ async function emailer(){
                         await page.close()   
                         pages = await browser.pages()
                         page = pages[1]
-                        await page.waitFor(WAIT_FOR)   
+                        // await page.waitFor(WAIT_FOR)   
                     }else{
                         console.log('No valid selector')
                     }
@@ -89,7 +90,7 @@ async function emailer(){
                     console.error(err)     
                     pages = await browser.pages()
                     page = pages[1]          
-                    await page.waitFor(WAIT_FOR)   
+                    // await page.waitFor(WAIT_FOR)   
                 }
             }
                     
@@ -103,6 +104,8 @@ async function emailer(){
 async function getEmail(page){
     let email = ''
     try{
+        await page.waitForSelector('a')
+
         const hrefs = await page.$$eval('a', arr => arr.map(el => el.getAttribute('href')))
         
         if(hrefs.length > 0){
