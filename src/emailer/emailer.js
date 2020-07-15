@@ -4,7 +4,7 @@ const path = require('path')
 
 const sendEmail = require('./sendEmail')
 
-const ejsFile = fs.readFileSync(path.join(__dirname, '/nodemailer-template-styled.ejs'), {
+const ejsFile = fs.readFileSync(path.join(__dirname, '/nodemailer-template-styled.html'), {
     encoding: 'utf8',
     flag: 'r'
 })
