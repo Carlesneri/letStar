@@ -20,7 +20,7 @@ const queries = ['el', 'the', 'in', 'of', 'my', 'is', 'at']
 const usedEmails = []
 
 async function emailer(){
-    for(let numPage = 2; numPage < MAX_PAGES; numPage++){
+    for(let numPage = 0; numPage < MAX_PAGES; numPage++){
         console.log('Page: ', numPage)        
         const browser = await puppeteer.launch({ 
             headless: true,
