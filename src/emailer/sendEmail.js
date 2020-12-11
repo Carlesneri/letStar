@@ -33,7 +33,7 @@ async function sendEmail(email, receiver){
         // console.log(ejsFile)
 
         const emailSended = await transporter.sendMail({
-            from: 'QR Codes | LightenPic <contact@lightenpic.pro>',
+            from: 'QR Codes with LightenPic <contact@lightenpic.pro>',
             to: receiver,
             subject: 'Free Image QR Code Generator',
             html: email

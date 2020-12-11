@@ -15,7 +15,7 @@ const MAX_PAGES = 34
 
 const WAIT_FOR = 0 // 1000
 
-const queries = ['el', 'the', 'in', 'of', 'my', 'is', 'at']
+const queries = ['el', 'the', 'in', 'of', 'my', 'is', 'at', 'us', 'go', 'hu', 'fu']
 
 const usedEmails = []
 
@@ -28,7 +28,7 @@ async function emailer(){
                 width: 800,
                 height: 1200
             },
-            args: ['--no-sandbox']
+            args: ['--no-sandbox', '--disable-setuid-sandbox']
         })
         let page = await browser.newPage()
         try{
