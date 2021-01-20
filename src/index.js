@@ -13,14 +13,14 @@ const caBundle = fs.readFileSync(path.join(__dirname, '../SSL/ca_bundle.crt'), '
 
 if(process.env.DEVELOPMENT === 'true'){
     http.createServer(app)
-    .listen(app.get('PORT'), () => console.log('Server listening on port ', app.get('PORT')))
+    .listen(3080, () => console.log('Server listening on port ', 3080))
 }else{
     https.createServer({
         key: privateKey,
         cert: certificate,
         ca: caBundle
     }, app)
-        .listen(443, () => console.log('Server listening on port 443'))
+        .listen(3443, () => console.log('Server listening on port 3443'))
 
         console.log('Redirecting https');
     
@@ -28,6 +28,6 @@ if(process.env.DEVELOPMENT === 'true'){
             res.writeHead(301, { "Location": "https://" + req.headers['host'] + req.url });
             res.end();
         })
-        .listen(app.get('PORT'), () => console.log('Server listening on port ', app.get('PORT')))
+        .listen(3080, () => console.log('Server listening on port ', 3080))
 }
 
