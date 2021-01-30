@@ -1,16 +1,11 @@
 const db = require('mongoose', {'useFindAndModify': false})
 const bcrypt = require('bcryptjs')
-// const dotenv = require('dotenv')
 const { MissionModel, UserModel, MissionerModel, StarModel } = require('../database/model')
 require('dotenv').config()
 require('../static/hbsHelpers')
 const validate = require('../validate/validate')
 const passport = require('passport')
-// dotenv.config()
-
-const DB_URI = process.env.DB_URI
-
-// console.log(DB_URI);
+const {DB_URI} = require('../../config')
 
 const {
     getMissionExample,
