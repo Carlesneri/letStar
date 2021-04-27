@@ -14,7 +14,7 @@ const app = express();
 require('./auth/local')
 
 //-->Settings
-app.set('port', 3001);
+app.set('port', 4004);
 app.set('views', path.join(__dirname, 'views'));
 app.set('static', path.join(__dirname, 'static'));
 app.engine('.hbs', exphbs({
